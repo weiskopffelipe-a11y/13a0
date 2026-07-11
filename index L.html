@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Libertadores Draft</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0a0b;
+    --panel:#141210;
+    --panel2:#1b1814;
+    --border:#332c1f;
+    --gold:#d4af37;
+    --gold-bright:#f0c94a;
+    --gold-dim:#8a6d1f;
+    --text:#f4ede0;
+    --text-dim:#9a9182;
+    --danger:#c0392b;
+  }
+  body.theme-ucl{
+    --bg:#050d24;
+    --panel:#0c1c3f;
+    --panel2:#122a54;
+    --border:#24447d;
+    --gold:#ffffff;
+    --gold-bright:#eaf2ff;
+    --gold-dim:#93add9;
+    --text:#eef4ff;
+    --text-dim:#8ea3cf;
+    --danger:#e0483a;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;}
+  a{color:inherit;}
+
+  /* ===== Navbar ===== */
+  .navbar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;background:#000;border-bottom:2px solid var(--gold);}
+  .brand{display:flex;align-items:center;gap:10px;}
+  .brand .mark{font-size:24px;}
+  .brand .txt{font-family:'Archivo Black',sans-serif;font-size:16px;letter-spacing:.02em;color:var(--gold);text-transform:uppercase;}
+  .navbar .pill{font-size:11px;font-weight:700;color:var(--text-dim);background:var(--panel2);border:1px solid var(--border);padding:6px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.04em;}
+
+  /* ===== Sub banner ===== */
+  .subbanner{background:var(--gold);color:#000;padding:11px 22px;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;text-align:center;flex-wrap:wrap;}
+  .subbanner .dot{width:7px;height:7px;border-radius:50%;background:#000;display:inline-block;}
+
+  .stagebar{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:14px 16px 0;font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;}
+  .stagebar .stg{padding:6px 12px;border:1px solid var(--border);border-radius:20px;color:var(--text-dim);background:var(--panel);}
+  .stagebar .stg.active{color:#000;background:var(--gold);border-color:var(--gold);}
+  .stagebar .stg.done{color:var(--gold);border-color:var(--gold);}
+
+  #app{max-width:1280px;margin:0 auto;}
+
+  /* ===== 3 column layout (draft) ===== */
+  .layout3{display:grid;grid-template-columns:1.35fr 400px;gap:16px;padding:18px 22px 6px;align-items:start;}
+  @media(max-width:980px){.layout3{grid-template-columns:1fr;padding:14px 14px 4px;gap:14px;}}
+  .pitch-col{position:sticky;top:10px;}
+  @media(max-width:980px){.pitch-col{position:static;max-width:340px;margin:0 auto;width:100%;}}
+  .right-col{display:flex;flex-direction:column;gap:14px;}
+  .right-panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:16px;max-height:min(46vh,480px);overflow-y:auto;}
+  @media(max-width:980px){.right-panel{max-height:none;}}
+
+  .microlabel{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);font-weight:700;margin-bottom:10px;}
+
+  .drawcard{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;margin-bottom:16px;}
+  .badge{width:54px;height:54px;border-radius:50%;background:var(--gold);color:#000;display:flex;align-items:center;justify-content:center;font-family:'Archivo Black',sans-serif;font-size:14px;margin-bottom:12px;}
+  .drawcard .tname{font-family:'Archivo Black',sans-serif;font-size:22px;line-height:1.15;margin-bottom:4px;}
+  .drawcard .tyear{color:var(--gold-bright);font-weight:800;font-size:14px;}
+  .drawcard .empty{color:var(--text-dim);font-size:13.5px;line-height:1.6;padding:6px 0 2px;}
+
+  .rerolltxt{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.04em;margin:14px 0 8px;font-weight:700;}
+  .btn{font-family:inherit;font-size:13.5px;font-weight:800;padding:12px 16px;border-radius:8px;border:none;cursor:pointer;text-transform:uppercase;letter-spacing:.03em;}
+  .btn:disabled{opacity:.35;cursor:not-allowed;}
+  .btn-gold{background:var(--gold);color:#000;}
+  .btn-gold:hover:not(:disabled){background:var(--gold-bright);}
+  .btn-outline{background:transparent;border:1px solid var(--border);color:var(--text);}
+  .btn-outline:hover:not(:disabled){border-color:var(--text-dim);}
+  .btn-block{width:100%;}
+
+  .pending-box{margin-top:14px;background:rgba(212,175,55,0.1);border:1px solid var(--gold);border-radius:8px;padding:10px 12px;font-size:12.5px;}
+  .pending-box b{color:var(--gold-bright);}
+  .pending-box button{margin-top:8px;background:none;border:1px solid var(--border);color:var(--text-dim);font-size:11px;padding:5px 9px;border-radius:6px;cursor:pointer;text-transform:uppercase;font-weight:700;}
+
+  .playerlist{margin-top:16px;border-top:1px solid var(--border);}
+  .prow{display:flex;align-items:center;gap:10px;padding:11px 2px;border-bottom:1px solid var(--border);cursor:pointer;}
+  .prow:hover:not(.disabled){background:var(--panel2);}
+  .prow.disabled{opacity:.32;cursor:not-allowed;}
+  .prow .num{font-size:11px;color:var(--text-dim);width:20px;font-weight:700;}
+  .prow .nm{flex:1;font-weight:700;font-size:14px;}
+  .prow .pc{font-size:10.5px;color:var(--text-dim);font-weight:700;letter-spacing:.02em;white-space:nowrap;}
+  .prow .ov{font-family:'Archivo Black',sans-serif;font-size:17px;color:var(--gold);width:30px;text-align:right;}
+
+  /* ===== Pitch ===== */
+  .pitchhead{background:var(--gold);color:#000;font-family:'Archivo Black',sans-serif;font-size:13px;letter-spacing:.03em;text-transform:uppercase;text-align:center;padding:11px;border-radius:8px 8px 0 0;}
+  .pitch-wrap{position:relative;width:100%;aspect-ratio:2/2.85;background:linear-gradient(180deg,#123a24,#0d2a19);border-left:2px solid var(--border);border-right:2px solid var(--border);overflow:hidden;}
+  .pitch-wrap::before{content:"";position:absolute;inset:6px;border:2px solid rgba(212,175,55,0.35);border-radius:4px;}
+  .pitch-wrap::after{content:"";position:absolute;left:50%;top:50%;width:70px;height:70px;border:2px solid rgba(212,175,55,0.35);border-radius:50%;transform:translate(-50%,-50%);}
+  .pitch-hline{position:absolute;left:6px;right:6px;top:50%;height:2px;background:rgba(212,175,55,0.35);}
+  .pitch-box{position:absolute;left:50%;width:44%;height:14%;border:2px solid rgba(212,175,55,0.35);transform:translateX(-50%);}
+  .pitch-box.top{top:6px;}
+  .pitch-box.bottom{bottom:6px;}
+  .pitchfoot{background:var(--gold);color:#000;font-family:'Archivo Black',sans-serif;font-size:12px;letter-spacing:.03em;text-transform:uppercase;text-align:center;padding:10px;border-radius:0 0 8px 8px;}
+
+  .slot{position:absolute;transform:translate(-50%,-50%);width:64px;min-height:64px;border:2px dashed rgba(244,237,224,0.4);border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:10px;text-align:center;padding:2px;}
+  .slot.filled{border:2px solid var(--gold);background:rgba(212,175,55,0.12);border-radius:8px;cursor:pointer;}
+  .slot.eligible{border:2px solid var(--gold-bright);background:rgba(240,201,74,0.18);cursor:pointer;animation:pulse 1.3s infinite;}
+  .slot.movesrc{border:2px solid #fff;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 3px rgba(240,201,74,0.25);}50%{box-shadow:0 0 0 7px rgba(240,201,74,0.08);}}
+  .slot-code{color:rgba(244,237,224,0.55);font-weight:800;letter-spacing:.03em;font-size:10.5px;}
+  .slot-name{font-weight:700;line-height:1.1;font-size:10px;color:var(--text);}
+  .slot-ovr{color:var(--gold-bright);font-weight:800;font-size:12.5px;}
+  @media(max-width:980px){.slot{width:52px;min-height:52px;font-size:9px;}}
+
+  /* ===== Box score (right col) ===== */
+  .boxhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+  .boxhead .lbl{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-dim);font-weight:700;}
+  .boxhead .cnt{font-family:'Archivo Black',sans-serif;color:var(--gold);font-size:14px;}
+  .legend{display:flex;gap:16px;margin-bottom:14px;font-size:11px;color:var(--text-dim);font-weight:700;text-transform:uppercase;}
+  .legend span{display:flex;align-items:center;gap:6px;}
+  .legend i{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .legend .atk{background:var(--gold);}
+  .legend .def{background:#c9c2b0;}
+
+  .boxrow{display:flex;justify-content:space-between;align-items:center;padding:11px 2px;border-bottom:1px solid var(--border);font-size:13px;cursor:pointer;}
+  .boxrow:hover.fillable{background:var(--panel2);}
+  .boxrow .pc{color:var(--text-dim);font-weight:800;font-size:11px;letter-spacing:.03em;width:40px;}
+  .boxrow .pv{flex:1;text-align:right;font-weight:700;}
+  .boxrow .pv.empty{color:var(--text-dim);font-weight:400;}
+  .boxrow .ov{color:var(--gold);font-weight:800;font-size:12.5px;width:26px;text-align:right;margin-left:8px;}
+
+  .resv-list{margin-top:6px;}
+  .resv-row{display:flex;justify-content:space-between;align-items:center;padding:9px 2px;border-bottom:1px solid var(--border);font-size:12.5px;}
+  .resv-row .nm{font-weight:600;}
+  .resv-row .sub{color:var(--text-dim);font-size:10.5px;}
+  .resv-row .ov{color:var(--gold);font-weight:800;}
+
+  .cta-bar{padding:20px 22px 50px;text-align:center;}
+
+  /* ===== Formation select ===== */
+  .formgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;padding:24px 22px;max-width:900px;margin:0 auto;}
+  .formcard{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:18px;cursor:pointer;text-align:center;}
+  .formcard:hover{border-color:var(--gold);}
+  .formcard .fname{font-family:'Archivo Black',sans-serif;font-size:22px;color:var(--gold);margin-bottom:8px;}
+  .formcard .fdesc{font-size:12px;color:var(--text-dim);line-height:1.5;}
+  .fs-title{text-align:center;font-family:'Archivo Black',sans-serif;font-size:20px;padding:24px 22px 0;color:var(--gold);}
+
+  /* ===== Groups / knockout (reuse panel style) ===== */
+  .panel{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:20px;margin:16px 22px;}
+  .panel h2{font-size:12.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--text-dim);margin:0 0 14px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;}
+  .panel h2 b{color:var(--gold);font-size:15px;text-transform:none;letter-spacing:0;font-family:'Archivo Black',sans-serif;}
+  .panel h2 small{color:var(--gold-bright);font-weight:700;text-transform:none;font-size:12px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{padding:8px 6px;text-align:center;border-bottom:1px solid var(--border);}
+  th{font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--text-dim);}
+  td.tname{text-align:left;font-weight:700;}
+  tr.me td{color:var(--gold);}
+  tr.qualified td.tname::after{content:" ✓";color:var(--gold-bright);}
+  .tie{background:var(--panel2);border:1px solid var(--border);border-radius:8px;padding:16px;}
+  .tie .tt{text-transform:uppercase;letter-spacing:.04em;color:var(--gold);font-size:12px;font-weight:800;margin-bottom:10px;}
+  .leg{display:flex;justify-content:space-between;font-size:14px;padding:5px 0;}
+  .leg .lscore{font-weight:800;color:var(--gold-bright);}
+  .aggline{margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);font-size:13px;color:var(--text-dim);display:flex;justify-content:space-between;}
+  .aggline b{color:var(--gold);}
+  .log{max-height:200px;overflow-y:auto;font-size:12.5px;color:var(--text-dim);line-height:1.8;}
+  .log div{border-bottom:1px dotted var(--border);padding:3px 0;}
+  .log div:first-child{color:var(--text);}
+  .end-screen{text-align:center;padding:50px 16px;}
+  .end-screen .trophy{font-size:56px;margin-bottom:10px;}
+  .end-screen h2{font-family:'Archivo Black',sans-serif;font-size:clamp(22px,5vw,32px);margin:10px 0;color:var(--gold);}
+  .end-screen p{color:var(--text-dim);max-width:480px;margin:0 auto 22px;line-height:1.6;font-size:14px;}
+
+  ::-webkit-scrollbar{width:7px;}
+  ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+</style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="brand"><span class="mark" id="brandMark">🏆</span><span class="txt" id="brandTxt">Libertadores Draft</span></div>
+    <div class="pill" id="navPill">Formação</div>
+  </div>
+  <div class="subbanner" id="subbanner">● BEM-VINDO · MONTE O TIME DOS SONHOS</div>
+  <div class="stagebar" id="stagebar"></div>
+  <div id="app"></div>
+
+<script>
+/* ===================== DADOS ===================== */
+const LIBERTADORES_TEAMS = [
+{team:"Flamengo", year:2019, players:[
+  {name:"Diego Alves", pos:["GOL"], ovr:84},{name:"Rafinha", pos:["LATD"], ovr:80},
+  {name:"Rodrigo Caio", pos:["ZAG"], ovr:82},{name:"Pablo Marí", pos:["ZAG"], ovr:80},
+  {name:"Filipe Luís", pos:["LATE"], ovr:81},{name:"Willian Arão", pos:["VOL"], ovr:80},
+  {name:"Gerson", pos:["VOL","MEI"], ovr:83},{name:"Éverton Ribeiro", pos:["MEI","PD"], ovr:86},
+  {name:"Arrascaeta", pos:["MEI","PE","PD"], ovr:87},{name:"Bruno Henrique", pos:["PE","PD","CA"], ovr:85},
+  {name:"Gabigol", pos:["CA","MEI"], ovr:89},
+]},
+{team:"Palmeiras", year:2021, players:[
+  {name:"Weverton", pos:["GOL"], ovr:83},{name:"Marcos Rocha", pos:["LATD"], ovr:80},
+  {name:"Gustavo Gómez", pos:["ZAG"], ovr:84},{name:"Luan Garcia", pos:["ZAG"], ovr:78},
+  {name:"Piquerez", pos:["LATE"], ovr:79},{name:"Danilo", pos:["VOL"], ovr:80},
+  {name:"Gabriel Menino", pos:["VOL","MEI"], ovr:79},{name:"Raphael Veiga", pos:["MEI","PE"], ovr:85},
+  {name:"Rony", pos:["PE","CA"], ovr:82},{name:"Dudu", pos:["PD","PE","MEI"], ovr:86},
+  {name:"Deyverson", pos:["CA"], ovr:78},
+]},
+{team:"River Plate", year:2018, players:[
+  {name:"Franco Armani", pos:["GOL"], ovr:86},{name:"Gonzalo Montiel", pos:["LATD"], ovr:80},
+  {name:"Jonatan Maidana", pos:["ZAG"], ovr:79},{name:"Javier Pinola", pos:["ZAG"], ovr:81},
+  {name:"Milton Casco", pos:["LATE"], ovr:78},{name:"Leonardo Ponzio", pos:["VOL"], ovr:79},
+  {name:"Exequiel Palacios", pos:["VOL","MEI"], ovr:83},{name:"Ignacio Fernández", pos:["MEI","PE"], ovr:82},
+  {name:"Gonzalo Martínez", pos:["PE","PD","MEI"], ovr:85},{name:"Rafael Borré", pos:["CA","PD"], ovr:84},
+  {name:"Lucas Pratto", pos:["CA"], ovr:80},
+]},
+{team:"Boca Juniors", year:2007, players:[
+  {name:"Guillermo Sara", pos:["GOL"], ovr:79},{name:"Hugo Ibarra", pos:["LATD"], ovr:78},
+  {name:"Daniel Díaz", pos:["ZAG"], ovr:80},{name:"Rolando Schiavi", pos:["ZAG"], ovr:79},
+  {name:"Clemente Rodríguez", pos:["LATE"], ovr:79},{name:"Mauricio Serna", pos:["VOL"], ovr:78},
+  {name:"Sebastián Battaglia", pos:["VOL","MEI"], ovr:81},{name:"Juan Román Riquelme", pos:["MEI","PE"], ovr:90},
+  {name:"Neri Cardozo", pos:["MEI","PD"], ovr:79},{name:"Rodrigo Palacio", pos:["CA","PD","PE"], ovr:85},
+  {name:"Ernesto Farías", pos:["CA"], ovr:77},
+]},
+{team:"São Paulo", year:2005, players:[
+  {name:"Rogério Ceni", pos:["GOL"], ovr:88},{name:"Renato", pos:["LATD"], ovr:76},
+  {name:"Léo", pos:["ZAG"], ovr:79},{name:"Alex Silva", pos:["ZAG"], ovr:80},
+  {name:"Júnior", pos:["LATE"], ovr:77},{name:"Josué", pos:["VOL"], ovr:79},
+  {name:"Mineiro", pos:["VOL","MEI"], ovr:79},{name:"Ilsinho", pos:["PE","MEI"], ovr:78},
+  {name:"Amoroso", pos:["CA","PE"], ovr:84},{name:"Grafite", pos:["CA"], ovr:82},
+]},
+{team:"Santos", year:2011, players:[
+  {name:"Rafael Cabral", pos:["GOL"], ovr:79},{name:"Danilo", pos:["LATD"], ovr:78},
+  {name:"Léo", pos:["ZAG"], ovr:78},{name:"Durval", pos:["ZAG"], ovr:79},
+  {name:"Ayrton", pos:["LATE"], ovr:76},{name:"Arouca", pos:["VOL"], ovr:80},
+  {name:"Elano", pos:["MEI","PD"], ovr:81},{name:"Ganso", pos:["MEI","PE"], ovr:85},
+  {name:"Neymar", pos:["PE","PD","MEI"], ovr:90},{name:"Borges", pos:["CA"], ovr:78},
+]},
+{team:"Corinthians", year:2012, players:[
+  {name:"Cássio", pos:["GOL"], ovr:85},{name:"Alessandro", pos:["LATD"], ovr:78},
+  {name:"Chicão", pos:["ZAG"], ovr:79},{name:"Léo", pos:["ZAG"], ovr:80},
+  {name:"Fábio Santos", pos:["LATE"], ovr:80},{name:"Ralf", pos:["VOL"], ovr:79},
+  {name:"Danilo", pos:["VOL","MEI"], ovr:78},{name:"Paulinho", pos:["MEI","VOL"], ovr:84},
+  {name:"Jorge Henrique", pos:["PD","PE"], ovr:79},{name:"Emerson Sheik", pos:["PE","PD"], ovr:80},
+  {name:"Guerrero", pos:["CA"], ovr:83},
+]},
+{team:"Grêmio", year:2017, players:[
+  {name:"Marcelo Grohe", pos:["GOL"], ovr:82},{name:"Léo Moura", pos:["LATD"], ovr:78},
+  {name:"Pedro Geromel", pos:["ZAG"], ovr:83},{name:"Kannemann", pos:["ZAG"], ovr:82},
+  {name:"Edilson", pos:["LATE"], ovr:78},{name:"Jailson", pos:["VOL"], ovr:78},
+  {name:"Michel", pos:["MEI","VOL"], ovr:79},{name:"Ramiro", pos:["MEI","PD"], ovr:80},
+  {name:"Maicon", pos:["PE","MEI"], ovr:81},{name:"Everton", pos:["PD","PE"], ovr:83},
+  {name:"Luan", pos:["CA","MEI"], ovr:84},
+]},
+{team:"Internacional", year:2010, players:[
+  {name:"Muriel", pos:["GOL"], ovr:80},{name:"César", pos:["LATD"], ovr:76},
+  {name:"Bolívar", pos:["ZAG"], ovr:80},{name:"Wellington", pos:["ZAG"], ovr:77},
+  {name:"Fabrício", pos:["LATE"], ovr:76},{name:"Índio", pos:["VOL"], ovr:78},
+  {name:"Tinga", pos:["VOL","MEI"], ovr:79},{name:"D'Alessandro", pos:["MEI","PE"], ovr:85},
+  {name:"Giuliano", pos:["MEI","PD"], ovr:79},{name:"Taison", pos:["PD","PE"], ovr:82},
+  {name:"Alecsandro", pos:["CA"], ovr:80},
+]},
+{team:"Independiente del Valle", year:2016, players:[
+  {name:"Esteban Dreer", pos:["GOL"], ovr:74},{name:"Fernando Guerrero", pos:["LATD"], ovr:73},
+  {name:"Cristian Pellerano", pos:["ZAG"], ovr:75},{name:"Lucas Piovi", pos:["ZAG"], ovr:74},
+  {name:"Marlon de Jesus", pos:["LATE"], ovr:74},{name:"Jhojan Julio", pos:["VOL"], ovr:76},
+  {name:"Damián Díaz", pos:["MEI","PE"], ovr:78},{name:"Pedro Pablo Perlaza", pos:["PE","MEI"], ovr:75},
+  {name:"Beder Caicedo", pos:["PD","CA"], ovr:76},{name:"Juan Luis Anangonó", pos:["CA"], ovr:77},
+]},
+{team:"Atlético Nacional", year:2016, players:[
+  {name:"Fernando Monetti", pos:["GOL"], ovr:79},{name:"Farid Díaz", pos:["LATD"], ovr:76},
+  {name:"Alexis Henríquez", pos:["ZAG"], ovr:78},{name:"Daniel Bocanegra", pos:["ZAG"], ovr:77},
+  {name:"Vladimir Marín", pos:["LATE"], ovr:75},{name:"Sebastián Gómez", pos:["VOL","MEI"], ovr:79},
+  {name:"Andrés Ricaurte", pos:["MEI","VOL"], ovr:78},{name:"Alejandro Guerra", pos:["MEI","PE"], ovr:81},
+  {name:"Orlando Berrío", pos:["PD","PE"], ovr:80},{name:"Miguel Borja", pos:["CA"], ovr:84},
+  {name:"Dayro Moreno", pos:["CA","PD"], ovr:79},
+]},
+{team:"Cruzeiro", year:2014, players:[
+  {name:"Fábio", pos:["GOL"], ovr:83},{name:"Mayke", pos:["LATD"], ovr:76},
+  {name:"Dedé", pos:["ZAG"], ovr:82},{name:"Manoel", pos:["ZAG"], ovr:79},
+  {name:"Egídio", pos:["LATE"], ovr:78},{name:"Henrique", pos:["VOL"], ovr:78},
+  {name:"Lucas Silva", pos:["VOL","MEI"], ovr:80},{name:"Ricardo Goulart", pos:["MEI","PD"], ovr:83},
+  {name:"Everton Ribeiro", pos:["MEI","PE"], ovr:84},{name:"Willian", pos:["PE","PD"], ovr:81},
+  {name:"Marcelo Moreno", pos:["CA"], ovr:82},
+]},
+{team:"Olimpia", year:1990, players:[
+  {name:"José Luis Chilavert", pos:["GOL"], ovr:85},{name:"Adalberto Mosqueira", pos:["LATD"], ovr:73},
+  {name:"Gerónimo Barrios", pos:["ZAG"], ovr:74},{name:"Celso Ayala", pos:["ZAG"], ovr:76},
+  {name:"Osvaldo Aquino", pos:["LATE"], ovr:73},{name:"Ever Almeida", pos:["VOL"], ovr:74},
+  {name:"Raúl Amarilla", pos:["VOL","MEI"], ovr:77},{name:"Adriano Samaniego", pos:["MEI","PE"], ovr:78},
+  {name:"Buenaventura Ferreira", pos:["PD"], ovr:75},{name:"Roberto Cabañas", pos:["CA"], ovr:80},
+  {name:"Miguel Ángel Cardozo", pos:["CA","MEI"], ovr:76},
+]},
+{team:"LDU Quito", year:2008, players:[
+  {name:"José Cevallos", pos:["GOL"], ovr:78},{name:"Jorge Guagua", pos:["LATD"], ovr:76},
+  {name:"Norberto Araujo", pos:["ZAG"], ovr:77},{name:"Diferson Torres", pos:["ZAG"], ovr:75},
+  {name:"Néicer Reasco", pos:["LATE"], ovr:75},{name:"Edwin Tenorio", pos:["VOL"], ovr:75},
+  {name:"Patricio Urrutia", pos:["VOL","MEI"], ovr:77},{name:"Alex Bolaños", pos:["MEI","PE"], ovr:76},
+  {name:"Luis Bolaños", pos:["PE","MEI"], ovr:76},{name:"Joffre Guerrón", pos:["PD","PE"], ovr:78},
+  {name:"Claudio Bieler", pos:["CA"], ovr:80},
+]},
+{team:"Peñarol", year:1987, players:[
+  {name:"Fernando Álvez", pos:["GOL"], ovr:80},{name:"Perdomo", pos:["LATD"], ovr:74},
+  {name:"Jorge Villazán", pos:["ZAG"], ovr:76},{name:"Néstor Gonçalves", pos:["ZAG"], ovr:75},
+  {name:"Aguerre", pos:["LATE"], ovr:74},{name:"Gustavo Matosas", pos:["VOL","MEI"], ovr:77},
+  {name:"Ostolaza", pos:["VOL"], ovr:75},{name:"Herrera", pos:["MEI"], ovr:75},
+  {name:"Diego Aguirre", pos:["PD","CA"], ovr:79},{name:"Antonio Alzamendi", pos:["CA","PE"], ovr:81},
+  {name:"Da Silva", pos:["CA"], ovr:76},
+]},
+{team:"Racing Club", year:2019, players:[
+  {name:"Gabriel Arias", pos:["GOL"], ovr:81},{name:"Iván Pillud", pos:["LATD"], ovr:78},
+  {name:"Leonardo Sigali", pos:["ZAG"], ovr:79},{name:"Marcos Rojo", pos:["ZAG"], ovr:80},
+  {name:"Gabriel Rojas", pos:["LATE"], ovr:77},{name:"Nery Domínguez", pos:["VOL"], ovr:79},
+  {name:"Marcelo Díaz", pos:["VOL","MEI"], ovr:79},{name:"Matías Rojas", pos:["MEI","PE"], ovr:80},
+  {name:"Fernando Belluschi", pos:["PE","MEI"], ovr:78},{name:"Ricardo Centurión", pos:["PD","PE"], ovr:81},
+  {name:"Lisandro López", pos:["CA"], ovr:82},
+]},
+{team:"Palmeiras", year:1999, players:[
+  {name:"Marcos", pos:["GOL"], ovr:85},{name:"Arce", pos:["LATD"], ovr:78},
+  {name:"Júnior", pos:["ZAG"], ovr:78},{name:"Galeano", pos:["ZAG"], ovr:77},
+  {name:"Cléber", pos:["LATE"], ovr:76},{name:"César Sampaio", pos:["VOL"], ovr:82},
+  {name:"Rogério", pos:["VOL"], ovr:76},{name:"Zinho", pos:["MEI","PE"], ovr:80},
+  {name:"Djalminha", pos:["MEI","PE","PD"], ovr:84},{name:"Euller", pos:["PD","PE"], ovr:78},
+  {name:"Oséas", pos:["CA"], ovr:81},
+]},
+{team:"São Paulo", year:1992, players:[
+  {name:"Zetti", pos:["GOL"], ovr:83},{name:"Cafu", pos:["LATD","PD"], ovr:84},
+  {name:"Ronaldão", pos:["ZAG"], ovr:78},{name:"Válber", pos:["ZAG"], ovr:77},
+  {name:"Antônio Carlos", pos:["LATE"], ovr:76},{name:"Cerezo", pos:["VOL","MEI"], ovr:82},
+  {name:"Adãozinho", pos:["VOL"], ovr:76},{name:"Raí", pos:["MEI","PE"], ovr:88},
+  {name:"Silas", pos:["PD","PE"], ovr:80},{name:"Müller", pos:["CA","PD","PE"], ovr:84},
+  {name:"Palhinha", pos:["CA"], ovr:79},
+]},
+{team:"Vélez Sarsfield", year:1994, players:[
+  {name:"José Luis Chilavert", pos:["GOL"], ovr:85},{name:"Cristian Traverso", pos:["LATD"], ovr:77},
+  {name:"Roberto Trotta", pos:["ZAG"], ovr:78},{name:"José Flores", pos:["ZAG"], ovr:76},
+  {name:"Gabriel Cedrés", pos:["LATE"], ovr:75},{name:"José Basualdo", pos:["VOL","MEI"], ovr:80},
+  {name:"Alejandro Apud", pos:["VOL"], ovr:76},{name:"Omar Asad", pos:["MEI","PE"], ovr:79},
+  {name:"Rodolfo Arruabarrena", pos:["MEI","PD"], ovr:78},{name:"Marcelo Delgado", pos:["CA"], ovr:79},
+]},
+{team:"Nacional", year:1988, players:[
+  {name:"Eduardo Pereira", pos:["GOL"], ovr:79},{name:"Néstor Pereira", pos:["LATD"], ovr:75},
+  {name:"Nelson Gutiérrez", pos:["ZAG"], ovr:81},{name:"Milton Coimbra", pos:["ZAG"], ovr:77},
+  {name:"Néstor Fabbro", pos:["LATE"], ovr:75},{name:"Waldemar Victorino", pos:["VOL","CA"], ovr:78},
+  {name:"Repetto", pos:["VOL"], ovr:76},{name:"Rúben Paz", pos:["MEI","PE"], ovr:82},
+  {name:"Daniel Marcos", pos:["PD","PE"], ovr:76},{name:"Carlos Aguilera", pos:["CA"], ovr:80},
+]},
+{team:"Colo-Colo", year:1991, players:[
+  {name:"Daniel Morón", pos:["GOL"], ovr:82},{name:"Rodrigo Contreras", pos:["LATD"], ovr:75},
+  {name:"Alejandro Vera", pos:["ZAG"], ovr:77},{name:"Javier Margas", pos:["ZAG"], ovr:78},
+  {name:"Sergio Vásquez", pos:["LATE"], ovr:76},{name:"Luis Pérez", pos:["VOL"], ovr:79},
+  {name:"Leonel Herrera", pos:["VOL","ZAG"], ovr:78},{name:"Miguel Ramírez", pos:["MEI","VOL"], ovr:79},
+  {name:"Marcelo Barticciotto", pos:["PE","MEI"], ovr:80},{name:"Iván Zamorano", pos:["CA","PD"], ovr:87},
+]},
+{team:"Estudiantes de La Plata", year:2009, players:[
+  {name:"Mariano Andújar", pos:["GOL"], ovr:82},{name:"Cristian Díaz", pos:["LATD"], ovr:75},
+  {name:"Leandro Desábato", pos:["ZAG"], ovr:78},{name:"Nicolás Pareja", pos:["ZAG"], ovr:79},
+  {name:"Ángel Morales", pos:["LATE"], ovr:74},{name:"Rodrigo Braña", pos:["VOL"], ovr:78},
+  {name:"Enzo Pérez", pos:["VOL","MEI"], ovr:81},{name:"José Sosa", pos:["MEI","PD"], ovr:82},
+  {name:"Juan Sebastián Verón", pos:["MEI","PE"], ovr:87},{name:"Guillermo Barros Schelotto", pos:["PD","PE"], ovr:80},
+  {name:"Mauro Boselli", pos:["CA"], ovr:82},
+]},
+{team:"Once Caldas", year:2004, players:[
+  {name:"Juan Carlos Henao", pos:["GOL"], ovr:78},{name:"Luís Amaranto Perea", pos:["LATD","ZAG"], ovr:76},
+  {name:"Fabio Renato Suárez", pos:["ZAG"], ovr:75},{name:"Diego Estrada", pos:["ZAG"], ovr:74},
+  {name:"Alexander Viveros", pos:["LATE"], ovr:74},{name:"Fabián Vargas", pos:["VOL","MEI"], ovr:79},
+  {name:"Elkin Soto", pos:["VOL"], ovr:75},{name:"Alex Escobar", pos:["MEI","PE"], ovr:76},
+  {name:"Wilder Medina", pos:["PD"], ovr:75},{name:"Hámilton Ricard", pos:["CA"], ovr:79},
+]},
+{team:"Atlético Mineiro", year:2013, players:[
+  {name:"Victor", pos:["GOL"], ovr:82},{name:"Marcos Rocha", pos:["LATD"], ovr:78},
+  {name:"Réver", pos:["ZAG"], ovr:82},{name:"Leonardo Silva", pos:["ZAG"], ovr:80},
+  {name:"Marcos Vinícius", pos:["LATE"], ovr:75},{name:"Josué", pos:["VOL"], ovr:79},
+  {name:"Escudero", pos:["VOL","MEI"], ovr:78},{name:"Ronaldinho", pos:["MEI","PE","PD"], ovr:89},
+  {name:"Bernard", pos:["PD","PE"], ovr:83},{name:"Jô", pos:["CA"], ovr:83},
+]},
+{team:"Fluminense", year:2023, players:[
+  {name:"Fábio", pos:["GOL"], ovr:82},{name:"Samuel Xavier", pos:["LATD"], ovr:77},
+  {name:"Nino", pos:["ZAG"], ovr:81},{name:"Felipe Melo", pos:["ZAG","VOL"], ovr:80},
+  {name:"Marcelo", pos:["LATE","PE"], ovr:78},{name:"André", pos:["VOL","MEI"], ovr:80},
+  {name:"Martinelli", pos:["VOL"], ovr:78},{name:"Ganso", pos:["MEI","PE"], ovr:82},
+  {name:"Jhon Arias", pos:["PE","PD","MEI"], ovr:81},{name:"John Kennedy", pos:["PD","CA"], ovr:76},
+  {name:"Germán Cano", pos:["CA"], ovr:85},
+]},
+{team:"Vasco da Gama", year:1998, players:[
+  {name:"Carlos Germano", pos:["GOL"], ovr:78},{name:"André Luiz", pos:["LATD"], ovr:75},
+  {name:"Odvan", pos:["ZAG"], ovr:76},{name:"Gonçalves", pos:["ZAG"], ovr:77},
+  {name:"Wagner", pos:["LATE"], ovr:74},{name:"Pedrinho", pos:["VOL"], ovr:75},
+  {name:"Juninho Pernambucano", pos:["MEI","VOL"], ovr:84},{name:"Viola", pos:["MEI","PD"], ovr:77},
+  {name:"Edmundo", pos:["CA","MEI"], ovr:88},{name:"Romário", pos:["CA"], ovr:91},
+  {name:"Amoroso", pos:["CA","PE"], ovr:81},
+]},
+{team:"Flamengo", year:1981, players:[
+  {name:"Raul Plassmann", pos:["GOL"], ovr:78},{name:"Léo", pos:["LATD"], ovr:76},
+  {name:"Mozer", pos:["ZAG"], ovr:79},{name:"Marinho Peres", pos:["ZAG"], ovr:76},
+  {name:"Júnior", pos:["LATE","MEI"], ovr:85},{name:"Andrade", pos:["VOL"], ovr:78},
+  {name:"Adílio", pos:["MEI","VOL"], ovr:79},{name:"Zico", pos:["MEI","PE","CA"], ovr:92},
+  {name:"Tita", pos:["PE","MEI"], ovr:78},{name:"Nunes", pos:["CA"], ovr:82},
+]},
+{team:"River Plate", year:1996, players:[
+  {name:"Germán Burgos", pos:["GOL"], ovr:80},{name:"Sorín", pos:["LATD","LATE"], ovr:79},
+  {name:"Roberto Sensini", pos:["ZAG"], ovr:80},{name:"Pedro Troglio", pos:["ZAG"], ovr:78},
+  {name:"José Chamot", pos:["LATE","ZAG"], ovr:79},{name:"Matías Almeyda", pos:["VOL"], ovr:82},
+  {name:"Enzo Francescoli", pos:["MEI","PE"], ovr:85},{name:"Ariel Ortega", pos:["MEI","PE","PD"], ovr:87},
+  {name:"Hernán Crespo", pos:["CA"], ovr:85},
+]},
+{team:"Boca Juniors", year:2000, players:[
+  {name:"Óscar Córdoba", pos:["GOL"], ovr:82},{name:"Julio César Toresani", pos:["LATD"], ovr:76},
+  {name:"Jorge Bermúdez", pos:["ZAG"], ovr:80},{name:"Nicolás Burdisso", pos:["ZAG"], ovr:78},
+  {name:"Diego Cagna", pos:["LATE","VOL"], ovr:78},{name:"Mauricio Serna", pos:["VOL"], ovr:79},
+  {name:"Juan Román Riquelme", pos:["MEI","PE"], ovr:88},{name:"Guillermo Barros Schelotto", pos:["PD","PE"], ovr:82},
+  {name:"Martín Palermo", pos:["CA"], ovr:86},
+]},
+{team:"Santos", year:1962, players:[
+  {name:"Gilmar", pos:["GOL"], ovr:84},{name:"Lima", pos:["LATD"], ovr:74},
+  {name:"Mauro Ramos", pos:["ZAG"], ovr:80},{name:"Calvet", pos:["ZAG"], ovr:76},
+  {name:"Ely", pos:["LATE"], ovr:73},{name:"Zito", pos:["VOL","MEI"], ovr:82},
+  {name:"Dorval", pos:["PD"], ovr:78},{name:"Pepe", pos:["PE","CA"], ovr:82},
+  {name:"Pelé", pos:["CA","MEI","PE"], ovr:96},{name:"Coutinho", pos:["CA","MEI"], ovr:84},
+]},
+{team:"Corinthians", year:1990, players:[
+  {name:"Ronaldo Giovanelli", pos:["GOL"], ovr:78},{name:"Josimar", pos:["LATD"], ovr:77},
+  {name:"Ademir", pos:["ZAG"], ovr:76},{name:"Perivaldo", pos:["ZAG"], ovr:75},
+  {name:"Odacil", pos:["LATE"], ovr:74},{name:"Néi", pos:["VOL"], ovr:75},
+  {name:"Neto", pos:["MEI","PE"], ovr:82},{name:"Silas", pos:["PE","PD"], ovr:78},
+  {name:"Edilson", pos:["CA"], ovr:79},
+]},
+{team:"Cruzeiro", year:1976, players:[
+  {name:"Raul", pos:["GOL"], ovr:82},{name:"Nelinho", pos:["LATD"], ovr:82},
+  {name:"Vantuir", pos:["ZAG"], ovr:77},{name:"Zé Carlos", pos:["ZAG"], ovr:76},
+  {name:"Roberto Duarte", pos:["LATE"], ovr:75},{name:"Renato", pos:["VOL"], ovr:76},
+  {name:"Dirceu Lopes", pos:["MEI","PE"], ovr:84},{name:"Joãozinho", pos:["PE","PD"], ovr:78},
+  {name:"Vaguinho", pos:["CA"], ovr:79},
+]},
+{team:"Independiente", year:1975, players:[
+  {name:"Miguel Santoro", pos:["GOL"], ovr:81},{name:"Ricardo Pavoni", pos:["LATD"], ovr:76},
+  {name:"Daniel Enrique López", pos:["ZAG"], ovr:78},{name:"Carlos Miguel Morete", pos:["ZAG"], ovr:76},
+  {name:"Jorge Maldonado", pos:["LATE"], ovr:75},{name:"Ricardo Bochini", pos:["MEI","VOL"], ovr:87},
+  {name:"Rubén Galván", pos:["VOL"], ovr:78},{name:"Daniel Bertoni", pos:["PD","PE"], ovr:81},
+  {name:"Mario Mendoza", pos:["PE","MEI"], ovr:76},{name:"Agustín Balbuena", pos:["CA"], ovr:80},
+]},
+{team:"Racing Club", year:1967, players:[
+  {name:"Agustín Cejas", pos:["GOL"], ovr:80},{name:"Néstor Rossi", pos:["LATD"], ovr:75},
+  {name:"Alfio Basile", pos:["ZAG"], ovr:78},{name:"Roberto Perfumo", pos:["ZAG"], ovr:83},
+  {name:"Humberto Maschio", pos:["MEI","PE"], ovr:80},{name:"Juan Carlos Rulli", pos:["VOL"], ovr:76},
+  {name:"Oscar Martín", pos:["LATE"], ovr:74},{name:"César Bernao", pos:["MEI"], ovr:75},
+  {name:"Norberto Raffo", pos:["CA"], ovr:79},{name:"Juan José Rodríguez", pos:["PD"], ovr:76},
+]},
+{team:"Estudiantes de La Plata", year:1968, players:[
+  {name:"Alberto Poletti", pos:["GOL"], ovr:79},{name:"José Medina", pos:["LATD"], ovr:75},
+  {name:"Oscar Malbernat", pos:["ZAG"], ovr:78},{name:"Ramón Aguirre Suárez", pos:["ZAG"], ovr:79},
+  {name:"Eduardo Manera", pos:["LATE"], ovr:74},{name:"Carlos Bilardo", pos:["VOL"], ovr:80},
+  {name:"Juan Ramón Verón", pos:["MEI","PE"], ovr:83},{name:"Marcos Conigliaro", pos:["MEI"], ovr:75},
+  {name:"Oscar Togneri", pos:["PD"], ovr:75},{name:"Alberto Domínguez", pos:["CA"], ovr:78},
+]},
+{team:"Peñarol", year:1966, players:[
+  {name:"Ladislao Mazurkiewicz", pos:["GOL"], ovr:83},{name:"William Martínez", pos:["LATD"], ovr:76},
+  {name:"Roberto Matosas", pos:["ZAG"], ovr:78},{name:"Néstor Gonçalves", pos:["ZAG"], ovr:78},
+  {name:"Aldo Chiesa", pos:["LATE"], ovr:74},{name:"Julio César Cortés", pos:["VOL","MEI"], ovr:79},
+  {name:"Pedro Rocha", pos:["MEI","PE"], ovr:85},{name:"Ephraím Sasso", pos:["VOL"], ovr:75},
+  {name:"Alberto Spencer", pos:["CA","PD"], ovr:87},{name:"Luis Cubilla", pos:["PD","PE"], ovr:82},
+]},
+{team:"Nacional", year:1971, players:[
+  {name:"Ladislao Mazurkiewicz", pos:["GOL"], ovr:84},{name:"Luis Ubiña", pos:["LATD"], ovr:76},
+  {name:"Roberto Sosa", pos:["ZAG"], ovr:77},{name:"Juan Martín Mujica", pos:["ZAG"], ovr:77},
+  {name:"Guillermo Escalada", pos:["LATE"], ovr:74},{name:"Julio Montero Castillo", pos:["VOL","ZAG"], ovr:79},
+  {name:"Luis Artime", pos:["CA"], ovr:85},{name:"Víctor Espárrago", pos:["MEI","PE"], ovr:79},
+  {name:"Juan Masnik", pos:["PD"], ovr:77},{name:"Pedro Cetta", pos:["MEI"], ovr:75},
+]},
+{team:"São Paulo", year:1993, players:[
+  {name:"Zetti", pos:["GOL"], ovr:84},{name:"Cafu", pos:["LATD","PD"], ovr:85},
+  {name:"Ronaldão", pos:["ZAG"], ovr:79},{name:"Válber", pos:["ZAG"], ovr:78},
+  {name:"Antônio Carlos", pos:["LATE"], ovr:77},{name:"Cerezo", pos:["VOL","MEI"], ovr:81},
+  {name:"Paulo Nunes", pos:["PE","CA"], ovr:79},{name:"Raí", pos:["MEI","PE"], ovr:89},
+  {name:"Palhinha", pos:["CA"], ovr:80},{name:"Müller", pos:["CA","PD","PE"], ovr:83},
+]},
+{team:"River Plate", year:1986, players:[
+  {name:"Nery Pumpido", pos:["GOL"], ovr:84},{name:"Oscar Ruggeri", pos:["ZAG"], ovr:85},
+  {name:"José Daniel Ponce", pos:["ZAG"], ovr:77},{name:"José Percudani", pos:["LATD"], ovr:75},
+  {name:"Julio Olarticoechea", pos:["LATE"], ovr:79},{name:"Rubén Pagnanini", pos:["VOL"], ovr:76},
+  {name:"Alejandro Domínguez", pos:["MEI","PE"], ovr:81},{name:"Norberto Alonso", pos:["MEI"], ovr:83},
+  {name:"Antonio Alzamendi", pos:["CA","PE"], ovr:82},{name:"Ricardo Gareca", pos:["CA"], ovr:80},
+]},
+{team:"Boca Juniors", year:1977, players:[
+  {name:"Hugo Gatti", pos:["GOL"], ovr:83},{name:"Rubén Suñé", pos:["LATD"], ovr:75},
+  {name:"Vicente Pernía", pos:["ZAG"], ovr:78},{name:"Ángel Rodríguez", pos:["ZAG"], ovr:76},
+  {name:"Alberto Tarantini", pos:["LATE","ZAG"], ovr:81},{name:"Miguel Ángel Giachello", pos:["VOL"], ovr:75},
+  {name:"Rubén Suñé", pos:["MEI"], ovr:76},{name:"Ubaldo Fillol", pos:["GOL"], ovr:85},
+  {name:"Salvador Ponce", pos:["MEI","PE"], ovr:79},{name:"Ricardo Bochini", pos:["MEI"], ovr:82},
+]},
+{team:"Flamengo", year:2022, players:[
+  {name:"Santos", pos:["GOL"], ovr:82},{name:"Varela", pos:["LATD"], ovr:80},
+  {name:"David Luiz", pos:["ZAG"], ovr:83},{name:"Léo Pereira", pos:["ZAG"], ovr:81},
+  {name:"Ayrton Lucas", pos:["LATE"], ovr:79},{name:"João Gomes", pos:["VOL"], ovr:82},
+  {name:"Thiago Maia", pos:["VOL","MEI"], ovr:79},{name:"Éverton Ribeiro", pos:["MEI","PD"], ovr:85},
+  {name:"Arrascaeta", pos:["MEI","PE","PD"], ovr:87},{name:"Gabigol", pos:["CA","MEI"], ovr:87},
+  {name:"Pedro", pos:["CA"], ovr:85},
+]},
+];
+
+const CHAMPIONS_TEAMS = [
+{team:"Real Madrid", year:2002, players:[
+  {name:"Iker Casillas", pos:["GOL"], ovr:85},{name:"Míchel Salgado", pos:["LATD"], ovr:78},
+  {name:"Fernando Hierro", pos:["ZAG"], ovr:84},{name:"Iván Helguera", pos:["ZAG"], ovr:80},
+  {name:"Roberto Carlos", pos:["LATE","PE"], ovr:86},{name:"Claude Makélélé", pos:["VOL"], ovr:83},
+  {name:"Steve McManaman", pos:["MEI","PE"], ovr:78},{name:"Zinedine Zidane", pos:["MEI","PE","PD"], ovr:92},
+  {name:"Luís Figo", pos:["PD","PE"], ovr:88},{name:"Raúl", pos:["CA","PD","PE"], ovr:90},
+  {name:"Fernando Morientes", pos:["CA"], ovr:84},
+]},
+{team:"Real Madrid", year:2014, players:[
+  {name:"Iker Casillas", pos:["GOL"], ovr:86},{name:"Dani Carvajal", pos:["LATD"], ovr:82},
+  {name:"Sergio Ramos", pos:["ZAG"], ovr:88},{name:"Pepe", pos:["ZAG"], ovr:83},
+  {name:"Marcelo", pos:["LATE","PE"], ovr:85},{name:"Xabi Alonso", pos:["VOL"], ovr:85},
+  {name:"Ángel Di María", pos:["MEI","PE","PD"], ovr:86},{name:"Luka Modrić", pos:["MEI"], ovr:87},
+  {name:"Gareth Bale", pos:["PD","PE"], ovr:87},{name:"Cristiano Ronaldo", pos:["CA","PE","PD"], ovr:96},
+  {name:"Karim Benzema", pos:["CA"], ovr:87},
+]},
+{team:"Real Madrid", year:2017, players:[
+  {name:"Keylor Navas", pos:["GOL"], ovr:84},{name:"Dani Carvajal", pos:["LATD"], ovr:84},
+  {name:"Sergio Ramos", pos:["ZAG"], ovr:88},{name:"Raphaël Varane", pos:["ZAG"], ovr:84},
+  {name:"Marcelo", pos:["LATE","PE"], ovr:86},{name:"Casemiro", pos:["VOL"], ovr:84},
+  {name:"Toni Kroos", pos:["MEI"], ovr:88},{name:"Luka Modrić", pos:["MEI"], ovr:89},
+  {name:"Gareth Bale", pos:["PD","PE"], ovr:85},{name:"Cristiano Ronaldo", pos:["CA","PE","PD"], ovr:96},
+  {name:"Karim Benzema", pos:["CA"], ovr:87},
+]},
+{team:"AC Milan", year:1994, players:[
+  {name:"Sebastiano Rossi", pos:["GOL"], ovr:78},{name:"Mauro Tassotti", pos:["LATD"], ovr:80},
+  {name:"Franco Baresi", pos:["ZAG"], ovr:90},{name:"Alessandro Costacurta", pos:["ZAG"], ovr:84},
+  {name:"Paolo Maldini", pos:["LATE","ZAG"], ovr:91},{name:"Demetrio Albertini", pos:["VOL"], ovr:82},
+  {name:"Zvonimir Boban", pos:["MEI","PE"], ovr:84},{name:"Dejan Savićević", pos:["MEI","PE","PD"], ovr:86},
+  {name:"Marcel Desailly", pos:["VOL","ZAG"], ovr:83},{name:"Daniele Massaro", pos:["CA"], ovr:79},
+  {name:"Jean-Pierre Papin", pos:["CA"], ovr:82},
+]},
+{team:"AC Milan", year:2007, players:[
+  {name:"Dida", pos:["GOL"], ovr:82},{name:"Cafu", pos:["LATD","PD"], ovr:83},
+  {name:"Alessandro Nesta", pos:["ZAG"], ovr:88},{name:"Paolo Maldini", pos:["LATE","ZAG"], ovr:88},
+  {name:"Gennaro Gattuso", pos:["VOL"], ovr:82},{name:"Andrea Pirlo", pos:["MEI","VOL"], ovr:89},
+  {name:"Clarence Seedorf", pos:["MEI"], ovr:84},{name:"Kaká", pos:["MEI","PD","PE"], ovr:91},
+  {name:"Filippo Inzaghi", pos:["CA"], ovr:84},{name:"Alberto Gilardino", pos:["CA"], ovr:80},
+]},
+{team:"Barcelona", year:2009, players:[
+  {name:"Víctor Valdés", pos:["GOL"], ovr:83},{name:"Dani Alves", pos:["LATD","PD"], ovr:85},
+  {name:"Gerard Piqué", pos:["ZAG"], ovr:84},{name:"Carles Puyol", pos:["ZAG"], ovr:86},
+  {name:"Éric Abidal", pos:["LATE"], ovr:81},{name:"Sergio Busquets", pos:["VOL"], ovr:83},
+  {name:"Xavi Hernández", pos:["MEI"], ovr:90},{name:"Andrés Iniesta", pos:["MEI","PE"], ovr:91},
+  {name:"Thierry Henry", pos:["PE","CA"], ovr:85},{name:"Lionel Messi", pos:["CA","PD","PE"], ovr:93},
+  {name:"Samuel Eto'o", pos:["CA","PD"], ovr:87},
+]},
+{team:"Barcelona", year:2011, players:[
+  {name:"Víctor Valdés", pos:["GOL"], ovr:84},{name:"Dani Alves", pos:["LATD","PD"], ovr:86},
+  {name:"Gerard Piqué", pos:["ZAG"], ovr:86},{name:"Carles Puyol", pos:["ZAG"], ovr:86},
+  {name:"Éric Abidal", pos:["LATE"], ovr:82},{name:"Sergio Busquets", pos:["VOL"], ovr:85},
+  {name:"Xavi Hernández", pos:["MEI"], ovr:91},{name:"Andrés Iniesta", pos:["MEI","PE"], ovr:92},
+  {name:"Pedro", pos:["PD","PE"], ovr:82},{name:"Lionel Messi", pos:["CA","PD","PE"], ovr:96},
+  {name:"David Villa", pos:["CA"], ovr:86},
+]},
+{team:"Manchester United", year:1999, players:[
+  {name:"Peter Schmeichel", pos:["GOL"], ovr:88},{name:"Gary Neville", pos:["LATD"], ovr:82},
+  {name:"Jaap Stam", pos:["ZAG"], ovr:87},{name:"Ronny Johnsen", pos:["ZAG"], ovr:80},
+  {name:"Denis Irwin", pos:["LATE"], ovr:81},{name:"Roy Keane", pos:["VOL"], ovr:88},
+  {name:"David Beckham", pos:["PD","MEI"], ovr:87},{name:"Ryan Giggs", pos:["PE","MEI"], ovr:88},
+  {name:"Paul Scholes", pos:["MEI","VOL"], ovr:85},{name:"Dwight Yorke", pos:["CA"], ovr:85},
+  {name:"Andy Cole", pos:["CA"], ovr:83},
+]},
+{team:"Manchester United", year:2008, players:[
+  {name:"Edwin van der Sar", pos:["GOL"], ovr:85},{name:"Wes Brown", pos:["LATD"], ovr:78},
+  {name:"Rio Ferdinand", pos:["ZAG"], ovr:87},{name:"Nemanja Vidić", pos:["ZAG"], ovr:87},
+  {name:"Patrice Evra", pos:["LATE"], ovr:83},{name:"Michael Carrick", pos:["VOL"], ovr:82},
+  {name:"Paul Scholes", pos:["MEI","VOL"], ovr:84},{name:"Cristiano Ronaldo", pos:["PD","PE","CA"], ovr:94},
+  {name:"Ryan Giggs", pos:["PE","MEI"], ovr:84},{name:"Wayne Rooney", pos:["CA","MEI"], ovr:87},
+  {name:"Carlos Tévez", pos:["CA"], ovr:84},
+]},
+{team:"Liverpool", year:2005, players:[
+  {name:"Jerzy Dudek", pos:["GOL"], ovr:79},{name:"Steve Finnan", pos:["LATD"], ovr:77},
+  {name:"Jamie Carragher", pos:["ZAG"], ovr:84},{name:"Sami Hyypiä", pos:["ZAG"], ovr:83},
+  {name:"Djimi Traoré", pos:["LATE"], ovr:74},{name:"Xabi Alonso", pos:["VOL"], ovr:84},
+  {name:"Steven Gerrard", pos:["MEI","CA"], ovr:90},{name:"Luis García", pos:["PD","PE"], ovr:78},
+  {name:"Harry Kewell", pos:["PE","MEI"], ovr:77},{name:"Milan Baroš", pos:["CA"], ovr:78},
+  {name:"Djibril Cissé", pos:["CA"], ovr:79},
+]},
+{team:"Liverpool", year:2019, players:[
+  {name:"Alisson", pos:["GOL"], ovr:88},{name:"Trent Alexander-Arnold", pos:["LATD"], ovr:85},
+  {name:"Virgil van Dijk", pos:["ZAG"], ovr:90},{name:"Joël Matip", pos:["ZAG"], ovr:80},
+  {name:"Andrew Robertson", pos:["LATE"], ovr:85},{name:"Fabinho", pos:["VOL"], ovr:83},
+  {name:"Jordan Henderson", pos:["MEI","VOL"], ovr:82},{name:"Georginio Wijnaldum", pos:["MEI"], ovr:81},
+  {name:"Mohamed Salah", pos:["PD","CA","PE"], ovr:90},{name:"Sadio Mané", pos:["PE","CA","PD"], ovr:88},
+  {name:"Roberto Firmino", pos:["CA","MEI"], ovr:85},
+]},
+{team:"Bayern Munich", year:2013, players:[
+  {name:"Manuel Neuer", pos:["GOL"], ovr:90},{name:"Philipp Lahm", pos:["LATD","VOL"], ovr:88},
+  {name:"Jérôme Boateng", pos:["ZAG"], ovr:85},{name:"Dante", pos:["ZAG"], ovr:82},
+  {name:"David Alaba", pos:["LATE","VOL"], ovr:85},{name:"Bastian Schweinsteiger", pos:["VOL"], ovr:87},
+  {name:"Javi Martínez", pos:["VOL","ZAG"], ovr:84},{name:"Toni Kroos", pos:["MEI"], ovr:87},
+  {name:"Arjen Robben", pos:["PD","PE"], ovr:88},{name:"Franck Ribéry", pos:["PE","PD"], ovr:89},
+  {name:"Mario Mandžukić", pos:["CA"], ovr:83},
+]},
+{team:"Bayern Munich", year:2020, players:[
+  {name:"Manuel Neuer", pos:["GOL"], ovr:89},{name:"Joshua Kimmich", pos:["LATD","VOL","MEI"], ovr:88},
+  {name:"David Alaba", pos:["ZAG","LATE"], ovr:86},{name:"Jérôme Boateng", pos:["ZAG"], ovr:83},
+  {name:"Alphonso Davies", pos:["LATE","PE"], ovr:82},{name:"Leon Goretzka", pos:["VOL","MEI"], ovr:85},
+  {name:"Thiago Alcântara", pos:["MEI","VOL"], ovr:86},{name:"Thomas Müller", pos:["MEI","PD","CA"], ovr:87},
+  {name:"Serge Gnabry", pos:["PD","PE"], ovr:85},{name:"Robert Lewandowski", pos:["CA"], ovr:93},
+  {name:"Kingsley Coman", pos:["PE","PD"], ovr:83},
+]},
+{team:"Juventus", year:1996, players:[
+  {name:"Angelo Peruzzi", pos:["GOL"], ovr:82},{name:"Moreno Torricelli", pos:["LATD"], ovr:76},
+  {name:"Ciro Ferrara", pos:["ZAG"], ovr:82},{name:"Paolo Montero", pos:["ZAG"], ovr:81},
+  {name:"Sergio Porrini", pos:["LATE"], ovr:76},{name:"Didier Deschamps", pos:["VOL"], ovr:83},
+  {name:"Antonio Conte", pos:["MEI","VOL"], ovr:80},{name:"Alessio Tacchinardi", pos:["MEI"], ovr:76},
+  {name:"Alessandro Del Piero", pos:["PE","CA","MEI"], ovr:87},{name:"Fabrizio Ravanelli", pos:["CA"], ovr:82},
+]},
+{team:"Inter Milan", year:2010, players:[
+  {name:"Júlio César", pos:["GOL"], ovr:85},{name:"Maicon", pos:["LATD","PD"], ovr:87},
+  {name:"Lúcio", pos:["ZAG"], ovr:86},{name:"Walter Samuel", pos:["ZAG"], ovr:85},
+  {name:"Cristian Chivu", pos:["LATE","ZAG"], ovr:79},{name:"Esteban Cambiasso", pos:["VOL"], ovr:83},
+  {name:"Wesley Sneijder", pos:["MEI","PE","PD"], ovr:88},{name:"Thiago Motta", pos:["VOL","MEI"], ovr:81},
+  {name:"Goran Pandev", pos:["PE","CA"], ovr:79},{name:"Diego Milito", pos:["CA"], ovr:85},
+  {name:"Samuel Eto'o", pos:["PD","PE","CA"], ovr:87},
+]},
+{team:"Chelsea", year:2012, players:[
+  {name:"Petr Čech", pos:["GOL"], ovr:86},{name:"Branislav Ivanović", pos:["LATD","ZAG"], ovr:82},
+  {name:"John Terry", pos:["ZAG"], ovr:86},{name:"David Luiz", pos:["ZAG","VOL"], ovr:82},
+  {name:"Ashley Cole", pos:["LATE"], ovr:85},{name:"Frank Lampard", pos:["MEI","VOL"], ovr:87},
+  {name:"John Obi Mikel", pos:["VOL"], ovr:78},{name:"Juan Mata", pos:["PD","PE","MEI"], ovr:84},
+  {name:"Ramires", pos:["VOL","MEI"], ovr:79},{name:"Didier Drogba", pos:["CA"], ovr:88},
+  {name:"Salomon Kalou", pos:["PE","CA"], ovr:76},
+]},
+{team:"Porto", year:2004, players:[
+  {name:"Vítor Baía", pos:["GOL"], ovr:83},{name:"Paulo Ferreira", pos:["LATD"], ovr:79},
+  {name:"Ricardo Carvalho", pos:["ZAG"], ovr:85},{name:"Jorge Costa", pos:["ZAG"], ovr:80},
+  {name:"Nuno Valente", pos:["LATE"], ovr:76},{name:"Costinha", pos:["VOL"], ovr:79},
+  {name:"Maniche", pos:["MEI","VOL"], ovr:82},{name:"Deco", pos:["MEI","PE","PD"], ovr:87},
+  {name:"Dmitri Alenichev", pos:["PE","MEI"], ovr:78},{name:"Derlei", pos:["CA"], ovr:79},
+  {name:"Benni McCarthy", pos:["CA"], ovr:80},
+]},
+{team:"Ajax", year:1995, players:[
+  {name:"Edwin van der Sar", pos:["GOL"], ovr:85},{name:"Michael Reiziger", pos:["LATD","ZAG"], ovr:80},
+  {name:"Frank de Boer", pos:["ZAG","VOL"], ovr:84},{name:"Danny Blind", pos:["ZAG"], ovr:81},
+  {name:"Frank Rijkaard", pos:["VOL","ZAG","MEI"], ovr:84},{name:"Edgar Davids", pos:["VOL","MEI"], ovr:83},
+  {name:"Ronald de Boer", pos:["MEI","PE","PD"], ovr:82},{name:"Clarence Seedorf", pos:["MEI","VOL"], ovr:82},
+  {name:"Marc Overmars", pos:["PE","PD"], ovr:84},{name:"Patrick Kluivert", pos:["CA"], ovr:84},
+  {name:"Jari Litmanen", pos:["CA","MEI"], ovr:83},
+]},
+];
+
+// Os overalls ficam como definidos individualmente para cada jogador: lendas (90+), muito bons (85+), bons (80+) — sem ajuste uniforme.
+
+// tier 3 = grande/tradicional, tier 2 = médio, tier 1 = pequeno (nunca deve ter overall alto)
+const RIVAL_CLUBS_LIBER = [
+  {name:"Nacional", tier:3},{name:"Colo-Colo", tier:3},{name:"Universitario", tier:2},
+  {name:"Barcelona SC", tier:2},{name:"Emelec", tier:2},{name:"Bolívar", tier:1},
+  {name:"The Strongest", tier:1},{name:"Deportivo Táchira", tier:2},{name:"Millonarios", tier:2},
+  {name:"Junior", tier:2},{name:"América de Cali", tier:2},{name:"Sporting Cristal", tier:2},
+  {name:"Alianza Lima", tier:2},{name:"Cerro Porteño", tier:2},{name:"Talleres", tier:2},
+  {name:"Estudiantes", tier:2},{name:"Vélez Sarsfield", tier:2},{name:"Huracán", tier:2},
+  {name:"Fluminense", tier:3},{name:"Botafogo", tier:2},{name:"Atlético Mineiro", tier:3},
+  {name:"Bahia", tier:2},{name:"Libertad", tier:2},{name:"Universidad Católica", tier:2},
+  {name:"Nacional Potosí", tier:1},{name:"Always Ready", tier:1},
+];
+const RIVAL_CLUBS_UCL = [
+  {name:"Arsenal", tier:2},{name:"Tottenham", tier:2},{name:"Atlético Madrid", tier:2},
+  {name:"Borussia Dortmund", tier:2},{name:"Napoli", tier:2},{name:"Sevilla", tier:2},
+  {name:"AS Monaco", tier:2},{name:"Benfica", tier:2},{name:"Valencia", tier:2},
+  {name:"Manchester City", tier:3},{name:"Paris Saint-Germain", tier:3},{name:"Roma", tier:2},
+  {name:"Lyon", tier:2},{name:"Schalke 04", tier:2},{name:"Villarreal", tier:2},
+  {name:"Shakhtar Donetsk", tier:1},{name:"Club Brugge", tier:1},{name:"Dinamo Zagreb", tier:1},
+  {name:"Young Boys", tier:1},{name:"FC Copenhagen", tier:1},{name:"Red Bull Salzburg", tier:1},
+  {name:"Malmö FF", tier:1},{name:"Maccabi Haifa", tier:1},{name:"Slavia Praga", tier:1},
+  {name:"Olympiacos", tier:1},{name:"Galatasaray", tier:2},
+];
+const TIER_CAPS = {1:{min:48,max:68}, 2:{min:56,max:80}, 3:{min:64,max:92}};
+
+const POS_LABEL = {GOL:"GOL",ZAG:"ZAG",LATD:"LD",LATE:"LE",VOL:"MC",MEI:"MEI",PD:"PD",PE:"PE",CA:"CA"};
+
+const COUNTRY_FLAGS = {
+  // Brasil
+  "Flamengo":"🇧🇷","Palmeiras":"🇧🇷","São Paulo":"🇧🇷","Santos":"🇧🇷","Corinthians":"🇧🇷",
+  "Grêmio":"🇧🇷","Internacional":"🇧🇷","Cruzeiro":"🇧🇷","Vasco da Gama":"🇧🇷","Atlético Mineiro":"🇧🇷",
+  "Fluminense":"🇧🇷","Botafogo":"🇧🇷","Bahia":"🇧🇷",
+  // Argentina
+  "River Plate":"🇦🇷","Boca Juniors":"🇦🇷","Racing Club":"🇦🇷","Vélez Sarsfield":"🇦🇷",
+  "Independiente":"🇦🇷","Estudiantes de La Plata":"🇦🇷","Estudiantes":"🇦🇷","Talleres":"🇦🇷","Huracán":"🇦🇷",
+  // Uruguai
+  "Peñarol":"🇺🇾","Nacional":"🇺🇾",
+  // Paraguai
+  "Olimpia":"🇵🇾","Cerro Porteño":"🇵🇾","Libertad":"🇵🇾",
+  // Equador
+  "LDU Quito":"🇪🇨","Independiente del Valle":"🇪🇨","Barcelona SC":"🇪🇨","Emelec":"🇪🇨",
+  // Colômbia
+  "Atlético Nacional":"🇨🇴","Once Caldas":"🇨🇴","Millonarios":"🇨🇴","Junior":"🇨🇴","América de Cali":"🇨🇴",
+  // Chile
+  "Colo-Colo":"🇨🇱","Universidad Católica":"🇨🇱",
+  // Bolívia
+  "Bolívar":"🇧🇴","The Strongest":"🇧🇴","Nacional Potosí":"🇧🇴","Always Ready":"🇧🇴",
+  // Peru
+  "Sporting Cristal":"🇵🇪","Alianza Lima":"🇵🇪","Universitario":"🇵🇪",
+  // Venezuela
+  "Deportivo Táchira":"🇻🇪",
+  // Espanha
+  "Real Madrid":"🇪🇸","Barcelona":"🇪🇸","Atlético Madrid":"🇪🇸","Valencia":"🇪🇸","Sevilla":"🇪🇸","Villarreal":"🇪🇸",
+  // Inglaterra
+  "Manchester United":"🏴","Liverpool":"🏴","Chelsea":"🏴","Arsenal":"🏴","Tottenham":"🏴","Manchester City":"🏴",
+  // Itália
+  "AC Milan":"🇮🇹","Juventus":"🇮🇹","Inter Milan":"🇮🇹","Napoli":"🇮🇹","Roma":"🇮🇹",
+  // Alemanha
+  "Bayern Munich":"🇩🇪","Borussia Dortmund":"🇩🇪","Schalke 04":"🇩🇪",
+  // Portugal
+  "Porto":"🇵🇹","Benfica":"🇵🇹",
+  // Holanda
+  "Ajax":"🇳🇱",
+  // França
+  "Paris Saint-Germain":"🇫🇷","AS Monaco":"🇫🇷","Lyon":"🇫🇷",
+  // Outros
+  "Shakhtar Donetsk":"🇺🇦","Club Brugge":"🇧🇪","Dinamo Zagreb":"🇭🇷","Young Boys":"🇨🇭",
+  "FC Copenhagen":"🇩🇰","Red Bull Salzburg":"🇦🇹","Malmö FF":"🇸🇪","Maccabi Haifa":"🇮🇱",
+  "Slavia Praga":"🇨🇿","Olympiacos":"🇬🇷","Galatasaray":"🇹🇷",
+};
+
+const FORMATIONS = {
+  "4-3-3": [
+    {code:"GOL",x:50,y:90},{code:"LATD",x:82,y:72},{code:"ZAG",x:63,y:79},{code:"ZAG",x:37,y:79},
+    {code:"LATE",x:18,y:72},{code:"VOL",x:50,y:55},{code:"MEI",x:66,y:38},{code:"MEI",x:34,y:38},
+    {code:"PD",x:80,y:14},{code:"CA",x:50,y:7},{code:"PE",x:20,y:14},
+  ],
+  "4-4-2": [
+    {code:"GOL",x:50,y:90},{code:"LATD",x:82,y:72},{code:"ZAG",x:63,y:79},{code:"ZAG",x:37,y:79},
+    {code:"LATE",x:18,y:72},{code:"VOL",x:63,y:48},{code:"VOL",x:37,y:48},{code:"PD",x:82,y:26},
+    {code:"PE",x:18,y:26},{code:"CA",x:60,y:8},{code:"CA",x:40,y:8},
+  ],
+  "4-2-3-1": [
+    {code:"GOL",x:50,y:90},{code:"LATD",x:82,y:72},{code:"ZAG",x:63,y:79},{code:"ZAG",x:37,y:79},
+    {code:"LATE",x:18,y:72},{code:"VOL",x:61,y:55},{code:"VOL",x:39,y:55},{code:"MEI",x:50,y:34},
+    {code:"PD",x:79,y:16},{code:"PE",x:21,y:16},{code:"CA",x:50,y:7},
+  ],
+  "3-5-2": [
+    {code:"GOL",x:50,y:90},{code:"ZAG",x:66,y:78},{code:"ZAG",x:50,y:80},{code:"ZAG",x:34,y:78},
+    {code:"LATD",x:87,y:52},{code:"LATE",x:13,y:52},{code:"VOL",x:50,y:57},{code:"MEI",x:63,y:33},
+    {code:"MEI",x:37,y:33},{code:"CA",x:60,y:8},{code:"CA",x:40,y:8},
+  ],
+  "4-1-4-1": [
+    {code:"GOL",x:50,y:90},{code:"LATD",x:82,y:72},{code:"ZAG",x:63,y:79},{code:"ZAG",x:37,y:79},
+    {code:"LATE",x:18,y:72},{code:"VOL",x:50,y:58},{code:"MEI",x:65,y:38},{code:"MEI",x:35,y:38},
+    {code:"PD",x:80,y:20},{code:"PE",x:20,y:20},{code:"CA",x:50,y:7},
+  ],
+  "5-4-1": [
+    {code:"GOL",x:50,y:90},{code:"ZAG",x:66,y:78},{code:"ZAG",x:50,y:80},{code:"ZAG",x:34,y:78},
+    {code:"LATD",x:87,y:58},{code:"LATE",x:13,y:58},{code:"VOL",x:61,y:40},{code:"VOL",x:39,y:40},
+    {code:"PD",x:80,y:18},{code:"PE",x:20,y:18},{code:"CA",x:50,y:7},
+  ],
+};
+const MAX_REROLLS = 3;
+const STAGES = ["Fase de Grupos","Oitavas","Quartas","Semifinal","Final"];
+const ATK_CODES = new Set(["MEI","PD","PE","CA"]);
+
+/* ===================== ESTADO ===================== */
+const state = {
+  phase: "landing",
+  mode: null, // "liber" | "ucl"
+  difficulty: null, // "easy" | "hard"
+  formationKey: null,
+  starterSlots: [],
+  rerollsLeft: MAX_REROLLS,
+  revealedTeam: null,
+  pending: null, // {type:'new'|'move', player, fromSlot}
+  group: null,
+  knockout: null,
+  finalResult: null,
+  log: [],
+};
+
+/* ===================== HELPERS ===================== */
+function makeId(team,player){ return team.team+"-"+team.year+"-"+player.name; }
+function rnd(a,b){ return Math.random()*(b-a)+a; }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function poisson(lambda){ const L=Math.exp(-lambda); let k=0,p=1; do{k++;p*=Math.random();}while(p>L); return k-1; }
+function simulateMatch(strA,strB){
+  const diff=strA-strB;
+  const lamA=clamp(1.3+diff*0.045,0.15,4.3);
+  const lamB=clamp(1.3-diff*0.045,0.15,4.3);
+  return [poisson(lamA),poisson(lamB)];
+}
+function pushLog(msg){ state.log.unshift(msg); if(state.log.length>60) state.log.pop(); }
+function getActiveTeamsDB(){ return state.mode==="ucl" ? CHAMPIONS_TEAMS : LIBERTADORES_TEAMS; }
+function getActiveRivalClubs(){ return state.mode==="ucl" ? RIVAL_CLUBS_UCL : RIVAL_CLUBS_LIBER; }
+function compName(){ return state.mode==="ucl" ? "Champions League" : "Libertadores"; }
+function randomRivalTeam(){
+  const list = getActiveRivalClubs();
+  const club = list[Math.floor(Math.random()*list.length)];
+  const year = Math.floor(rnd(1985,2024));
+  return {name: club.name+" "+year, tier: club.tier, flag: COUNTRY_FLAGS[club.name]||"🏳️"};
+}
+function badgeInitials(name){
+  const skip=new Set(["de","da","do","dos","das","e"]);
+  const words = name.split(" ").filter(w=>!skip.has(w.toLowerCase()));
+  let s = words.slice(0,3).map(w=>w[0]).join("").toUpperCase();
+  if(s.length<2) s = name.slice(0,3).toUpperCase();
+  return s;
+}
+function isDraftComplete(){ return state.starterSlots.every(s=>s.filled); }
+function isPlayerUsed(id){
+  return state.starterSlots.some(s=>s.filled && s.filled.id===id);
+}
+function emptyStarterCodes(excludeIdx){
+  const set=new Set();
+  state.starterSlots.forEach((s,i)=>{ if(!s.filled && i!==excludeIdx) set.add(s.code); });
+  return set;
+}
+function canSelectPlayer(p,id){
+  if(isPlayerUsed(id)) return false;
+  if(isDraftComplete()) return false;
+  const empties = emptyStarterCodes(-1);
+  return p.pos.some(c=>empties.has(c));
+}
+function getAltYearTeam(t){
+  return getActiveTeamsDB().find(x=> x.team===t.team && x.year!==t.year);
+}
+function teamStrength(){
+  const filled = state.starterSlots.filter(s=>s.filled);
+  if(filled.length===0) return 0;
+  const avg = filled.reduce((s,x)=>s+x.filled.ovr,0)/filled.length;
+  return Math.round(avg*10)/10;
+}
+
+/* ===================== RENDER RAIZ ===================== */
+function render(){
+  renderStagebar();
+  renderChrome();
+  const app=document.getElementById("app");
+  if(state.phase==="landing") app.innerHTML = renderLanding();
+  else if(state.phase==="mode") app.innerHTML = renderModeSelect();
+  else if(state.phase==="difficulty") app.innerHTML = renderDifficultySelect();
+  else if(state.phase==="formation") app.innerHTML = renderFormationSelect();
+  else if(state.phase==="draft") app.innerHTML = renderDraft();
+  else if(state.phase==="groups") app.innerHTML = renderGroups();
+  else if(state.phase==="knockout") app.innerHTML = renderKnockout();
+  else if(state.phase==="end") app.innerHTML = renderEnd();
+  bindEvents();
+}
+function renderChrome(){
+  const navPill = document.getElementById("navPill");
+  const sub = document.getElementById("subbanner");
+  const brandTxt = document.getElementById("brandTxt");
+  const brandMark = document.getElementById("brandMark");
+  document.body.classList.toggle("theme-ucl", state.mode==="ucl");
+  brandTxt.textContent = state.mode==="ucl" ? "Champions Draft" : "Libertadores Draft";
+  brandMark.textContent = state.mode==="ucl" ? "⭐" : "🏆";
+  if(state.phase==="landing"){
+    navPill.textContent="Bem-vindo";
+    sub.innerHTML = '<span class="dot"></span> TENTE GANHAR A CHAMPIONS LEAGUE OU A LIBERTADORES';
+  } else if(state.phase==="mode"){
+    navPill.textContent="Modo de Jogo";
+    sub.innerHTML = '<span class="dot"></span> ESCOLHA O MODO DE JOGO';
+  } else if(state.phase==="difficulty"){
+    navPill.textContent="Dificuldade";
+    sub.innerHTML = `<span class="dot"></span> ${compName().toUpperCase()} · ESCOLHA A DIFICULDADE`;
+  } else if(state.phase==="formation"){
+    navPill.textContent="Formação";
+    sub.innerHTML = `<span class="dot"></span> ${compName().toUpperCase()} · ESCOLHA SUA FORMAÇÃO TÁTICA`;
+  } else if(state.phase==="draft"){
+    const filled = state.starterSlots.filter(s=>s.filled).length;
+    navPill.textContent = filled+"/11 titulares";
+    sub.innerHTML = `<span class="dot"></span> ${compName().toUpperCase()} · FORMAÇÃO ${state.formationKey} · ${state.rerollsLeft} RE-SORTEIOS RESTANTES (JOGO TODO)`;
+  } else if(state.phase==="groups"){
+    navPill.textContent="Fase de Grupos";
+    sub.innerHTML = `<span class="dot"></span> ${compName().toUpperCase()} · FASE DE GRUPOS`;
+  } else if(state.phase==="knockout"){
+    navPill.textContent = STAGES[1+state.knockout.stageIdx];
+    sub.innerHTML = `<span class="dot"></span> ${compName().toUpperCase()} · ${STAGES[1+state.knockout.stageIdx].toUpperCase()}`;
+  } else if(state.phase==="end"){
+    navPill.textContent = state.finalResult==="champion" ? "Campeão" : "Eliminado";
+    sub.innerHTML = state.finalResult==="champion" ? `<span class="dot"></span> CAMPEÃO DA ${compName().toUpperCase()}` : `<span class="dot"></span> ELIMINADO DA ${compName().toUpperCase()}`;
+  }
+}
+function renderStagebar(){
+  const bar=document.getElementById("stagebar");
+  if(state.phase==="landing" || state.phase==="mode" || state.phase==="difficulty"){ bar.innerHTML=""; return; }
+  let idxCurrent=-2;
+  if(state.phase==="formation") idxCurrent=-2;
+  else if(state.phase==="draft") idxCurrent=-1;
+  else if(state.phase==="groups") idxCurrent=0;
+  else if(state.phase==="knockout") idxCurrent=1+state.knockout.stageIdx;
+  else if(state.phase==="end") idxCurrent = state.finalResult==="champion" ? 5 : (1+(state.knockout?state.knockout.stageIdx:0));
+  bar.innerHTML = STAGES.map((s,i)=>{
+    let cls="stg";
+    if(state.phase==="end" && state.finalResult==="champion") cls+=" done";
+    else if(i<idxCurrent) cls+=" done";
+    else if(i===idxCurrent) cls+=" active";
+    return `<div class="${cls}">${s}</div>`;
+  }).join("");
+}
+
+/* ===================== TELA INICIAL ===================== */
+function renderLanding(){
+  return `
+    <div class="end-screen" style="padding-top:60px;">
+      <div style="font-family:'Archivo Black',sans-serif; font-size:clamp(48px,12vw,96px); color:var(--gold); letter-spacing:.02em; line-height:1;">13 A 0</div>
+      <p style="max-width:480px; margin:18px auto 28px; color:var(--text-dim); font-size:15.5px; line-height:1.6;">
+        Tente ganhar a Champions League ou a Libertadores montando seu time na sorte.
+      </p>
+      <button class="btn btn-gold" id="landingStartBtn">Jogar ➜</button>
+    </div>
+  `;
+}
+
+/* ===================== MODO DE JOGO ===================== */
+function renderModeSelect(){
+  return `
+    <div class="fs-title">ESCOLHA O MODO DE JOGO</div>
+    <div class="formgrid" style="max-width:700px;">
+      <div class="formcard" data-mode="liber">
+        <div class="fname">🏆 Libertadores</div>
+        <div class="fdesc">Monte seu time com craques históricos sul-americanos e conquiste a Copa Libertadores.</div>
+      </div>
+      <div class="formcard" data-mode="ucl">
+        <div class="fname">⭐ Champions League</div>
+        <div class="fdesc">Monte seu time com craques históricos europeus e conquiste a Champions League.</div>
+      </div>
+    </div>
+  `;
+}
+function chooseMode(mode){
+  state.mode = mode;
+  state.phase = "difficulty";
+  render();
+}
+
+/* ===================== DIFICULDADE ===================== */
+function renderDifficultySelect(){
+  return `
+    <div class="fs-title">ESCOLHA A DIFICULDADE</div>
+    <div class="formgrid" style="max-width:700px;">
+      <div class="formcard" data-difficulty="easy">
+        <div class="fname">🙂 Fácil</div>
+        <div class="fdesc">Os overalls dos jogadores ficam visíveis durante todo o draft.</div>
+      </div>
+      <div class="formcard" data-difficulty="hard">
+        <div class="fname">🔥 Difícil</div>
+        <div class="fdesc">Os overalls ficam escondidos — você monta o time só pelo nome e posição.</div>
+      </div>
+    </div>
+  `;
+}
+function chooseDifficulty(level){
+  state.difficulty = level;
+  state.phase = "formation";
+  render();
+}
+
+/* ===================== FORMAÇÃO ===================== */
+function renderFormationSelect(){
+  const descs = {
+    "4-3-3":"4 zagueiros, 3 meio-campistas, 3 atacantes",
+    "4-4-2":"4 zagueiros, 4 meio-campistas, 2 centroavantes",
+    "4-2-3-1":"Defesa sólida, 3 armadores e um centroavante",
+    "3-5-2":"3 zagueiros, alas ofensivos e dupla de ataque",
+    "4-1-4-1":"1 volante de proteção, meio-campo largo",
+    "5-4-1":"Linha de 5 na defesa, formação retranqueira",
+  };
+  return `
+    <div class="fs-title">ESCOLHA SUA FORMAÇÃO</div>
+    <div class="formgrid">
+      ${Object.keys(FORMATIONS).map(k=>`
+        <div class="formcard" data-formation="${k}">
+          <div class="fname">${k}</div>
+          <div class="fdesc">${descs[k]}</div>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+function chooseFormation(key){
+  state.formationKey = key;
+  state.starterSlots = FORMATIONS[key].map(s=>({code:s.code,x:s.x,y:s.y,filled:null}));
+  state.rerollsLeft=MAX_REROLLS; state.revealedTeam=null; state.pending=null;
+  state.phase="draft";
+  render();
+}
+
+/* ===================== DRAFT ===================== */
+function renderDraft(){
+  const draftDone = isDraftComplete();
+  const canRoll = !state.revealedTeam && !draftDone;
+  const filledStarters = state.starterSlots.filter(s=>s.filled).length;
+  const canStart = filledStarters===11;
+  const hideOvr = state.difficulty==="hard";
+
+  let drawcardHtml = `<div class="drawcard"><div class="microlabel">Sorteado</div><div class="empty">Nenhum time sorteado ainda. Clique em "Sortear" para revelar um time de um ano qualquer.</div></div>`;
+  let playerListHtml = "";
+  let rerollBtnsHtml = "";
+  if(state.revealedTeam){
+    const t = state.revealedTeam;
+    const flag = COUNTRY_FLAGS[t.team] || "🏳️";
+    drawcardHtml = `
+      <div class="drawcard">
+        <div class="microlabel">Sorteado</div>
+        <div class="badge">${badgeInitials(t.team)}</div>
+        <div class="tname">${t.team}</div>
+        <div class="tyear">${t.year} ${flag}</div>
+      </div>
+    `;
+    if(!state.pending){
+      const hasAltYear = !!getAltYearTeam(t);
+      const canReroll = state.rerollsLeft>0;
+      rerollBtnsHtml = `
+        <div class="rerolltxt">Não curtiu esse time? Re-sorteie · ${state.rerollsLeft}/${MAX_REROLLS} restantes (vale para o jogo todo)</div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn btn-outline" style="flex:1;" id="rerollTeamBtn" ${canReroll?"":"disabled"}>Outro Time</button>
+          <button class="btn btn-outline" style="flex:1;" id="rerollYearBtn" ${(canReroll&&hasAltYear)?"":"disabled"}>Outro Ano</button>
+        </div>
+      `;
+    }
+    playerListHtml = `
+      <div class="microlabel" id="playerListAnchor" style="margin-top:4px;">Escolha um jogador</div>
+      <div class="playerlist">
+        ${t.players.map((p,i)=>{
+          const id = makeId(t,p);
+          const used = isPlayerUsed(id);
+          const can = canSelectPlayer(p,id);
+          return `<div class="prow ${can?"":"disabled"}" data-pick="${id}">
+            <div class="num">#${i+1}</div>
+            <div class="nm">${p.name}</div>
+            <div class="pc">${p.pos.map(c=>POS_LABEL[c]).join("/")}${used?" · escalado":(!can?" · sem vaga":"")}</div>
+            ${hideOvr?"":`<div class="ov">${p.ovr}</div>`}
+          </div>`;
+        }).join("")}
+      </div>
+    `;
+  }
+
+  let pendingHtml = "";
+  if(state.pending){
+    if(state.pending.type==="new"){
+      pendingHtml = `<div class="pending-box"><b>${state.pending.player.name}</b> selecionado — clique numa posição dourada piscando no campo para escalar.</div>`;
+    } else {
+      pendingHtml = `<div class="pending-box">Movendo <b>${state.pending.player.name}</b> — clique numa posição dourada piscando para reposicionar, ou clique nele de novo para cancelar.</div>`;
+    }
+  }
+
+  const rollBtnHtml = state.revealedTeam ? "" : `
+    <button class="btn btn-gold btn-block" id="rollBtn" ${canRoll?"":"disabled"}>🎲 Sortear Titular</button>
+    <div style="color:var(--text-dim); font-size:12px; margin-top:8px;">Só é possível 1 sorteio por vez — resolva o time atual antes do próximo.</div>
+  `;
+  const resetBtnHtml = `<button class="btn btn-outline btn-block" id="resetDraftBtn" style="margin-top:10px;">Reiniciar Draft</button>`;
+
+  const filledSlots = state.starterSlots.filter(s=>s.filled).length;
+  const boxRows = state.starterSlots.map((s,i)=>{
+    const filled = !!s.filled;
+    return `<div class="boxrow ${filled?"fillable":""}" ${filled?`data-slotmove="${i}"`:""}>
+      <span class="pc">${POS_LABEL[s.code]}</span>
+      <span class="pv ${filled?"":"empty"}">${filled?s.filled.name:"—"}</span>
+      ${(filled&&!hideOvr)?`<span class="ov">${s.filled.ovr}</span>`:""}
+    </div>`;
+  }).join("");
+
+  return `
+    <div class="layout3">
+      <div class="pitch-col">
+        <div class="pitchhead">Escalação — ${state.formationKey}</div>
+        ${renderPitch()}
+        <div class="pitchfoot">${compName()} Draft</div>
+      </div>
+      <div class="right-col">
+        <div class="right-panel">
+          ${drawcardHtml}
+          ${rollBtnHtml}
+          ${rerollBtnsHtml}
+          ${resetBtnHtml}
+          ${pendingHtml}
+          ${playerListHtml}
+        </div>
+        <div class="right-panel">
+          <div class="boxhead"><span class="lbl">Box Score</span><span class="cnt">${filledSlots}/11</span></div>
+          <div class="legend"><span><i class="atk"></i>Ataque</span><span><i class="def"></i>Defesa</span></div>
+          <div class="boxlist">${boxRows}</div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-bar">
+      <button class="btn btn-gold" id="startBtn" ${canStart?"":"disabled"}>Ir para a ${compName()} ➜</button>
+      ${!canStart?`<div style="color:var(--text-dim);font-size:12.5px;margin-top:10px;">Complete os 11 titulares para começar</div>`:""}
+    </div>
+  `;
+}
+function renderPitch(){
+  return `<div class="pitch-wrap"><div class="pitch-hline"></div><div class="pitch-box top"></div><div class="pitch-box bottom"></div>
+    ${state.starterSlots.map((s,i)=>{
+      let eligible = false;
+      if(state.pending){
+        if(state.pending.type==="new") eligible = !s.filled && state.pending.player.pos.includes(s.code);
+        else eligible = !s.filled && state.pending.player.pos.includes(s.code);
+      }
+      const isMoveSrc = state.pending && state.pending.type==="move" && state.pending.fromSlot===i;
+      const cls = "slot"+(s.filled?" filled":"")+(eligible?" eligible":"")+(isMoveSrc?" movesrc":"");
+      const content = s.filled ? `<div class="slot-name">${s.filled.name}</div><div class="slot-ovr">${s.filled.ovr}</div>` : `<div class="slot-code">${POS_LABEL[s.code]}</div>`;
+      return `<div class="${cls}" style="left:${s.x}%; top:${s.y}%;" data-slot="${i}">${content}</div>`;
+    }).join("")}
+  </div>`;
+}
+function rollDice(){
+  if(state.revealedTeam || isDraftComplete()) return; // só 1 sorteio por vez — precisa resolver o atual primeiro
+  state.pending=null;
+  const db = getActiveTeamsDB();
+  state.revealedTeam = db[Math.floor(Math.random()*db.length)];
+  render();
+  scrollToPlayerList();
+}
+function rerollDifferentTeam(){
+  if(!state.revealedTeam || state.pending || state.rerollsLeft<=0) return;
+  state.rerollsLeft--;
+  const db = getActiveTeamsDB();
+  let next;
+  do{ next = db[Math.floor(Math.random()*db.length)]; }
+  while(db.length>1 && next.team===state.revealedTeam.team && next.year===state.revealedTeam.year);
+  state.revealedTeam = next;
+  render();
+  scrollToPlayerList();
+}
+function rerollSameTeamOtherYear(){
+  if(!state.revealedTeam || state.pending || state.rerollsLeft<=0) return;
+  const alt = getAltYearTeam(state.revealedTeam);
+  if(!alt) return;
+  state.rerollsLeft--;
+  state.revealedTeam = alt;
+  render();
+  scrollToPlayerList();
+}
+function scrollToPlayerList(){
+  requestAnimationFrame(()=>{
+    const el = document.getElementById("playerListAnchor");
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+}
+function selectPlayer(id){
+  const t=state.revealedTeam; if(!t) return;
+  const p = t.players.find(pl=>makeId(t,pl)===id);
+  if(!p || !canSelectPlayer(p,id)) return;
+  const playerObj = {id, name:p.name, pos:p.pos, ovr:p.ovr, team:t.team, year:t.year};
+  state.pending = {type:"new", player:playerObj};
+  render();
+  scrollToPitch();
+}
+function scrollToPitch(){
+  requestAnimationFrame(()=>{
+    const el = document.querySelector(".pitch-col");
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+}
+function slotClicked(idx){
+  const slot = state.starterSlots[idx];
+  // click on a filled slot: initiate or cancel a move
+  if(slot.filled){
+    if(state.pending && state.pending.type==="move" && state.pending.fromSlot===idx){
+      state.pending=null; render(); return;
+    }
+    const others = emptyStarterCodes(idx);
+    const canMove = slot.filled.pos.some(c=>others.has(c));
+    if(canMove){
+      state.pending = {type:"move", player:slot.filled, fromSlot:idx};
+      render();
+    }
+    return;
+  }
+  // click on an empty slot: finalize placement if eligible
+  if(!state.pending) return;
+  if(!state.pending.player.pos.includes(slot.code)) return;
+  if(state.pending.type==="new"){
+    slot.filled = state.pending.player;
+    state.pending=null; state.revealedTeam=null;
+    render();
+    scrollToDrawPanel();
+    return;
+  } else {
+    state.starterSlots[state.pending.fromSlot].filled = null;
+    slot.filled = state.pending.player;
+    state.pending=null;
+  }
+  render();
+}
+function scrollToDrawPanel(){
+  requestAnimationFrame(()=>{
+    const el = document.querySelector(".right-col");
+    if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+  });
+}
+function resetDraft(){
+  state.phase="formation"; state.formationKey=null; state.starterSlots=[];
+  state.rerollsLeft=MAX_REROLLS; state.revealedTeam=null; state.pending=null;
+  render();
+}
+function fullRestart(){
+  state.phase="mode"; state.mode=null; state.difficulty=null; state.formationKey=null; state.starterSlots=[];
+  state.rerollsLeft=MAX_REROLLS; state.revealedTeam=null; state.pending=null;
+  state.group=null; state.knockout=null; state.finalResult=null; state.log=[];
+  render();
+}
+
+/* ===================== GRUPOS ===================== */
+function startTournament(){
+  const myStrength = teamStrength();
+  const opps=[1,2,3].map(()=>{
+    const rival = randomRivalTeam();
+    const cap = TIER_CAPS[rival.tier];
+    const desired = myStrength - 16 + rnd(0,8);
+    return {name:rival.name+" "+rival.flag, str:Math.round(clamp(desired, cap.min, cap.max))};
+  });
+  const teams=[{name:"Meu Time",str:myStrength,mine:true}, ...opps.map(o=>({name:o.name,str:o.str,mine:false}))];
+  const rounds=[[[0,1],[2,3]],[[0,2],[3,1]],[[0,3],[1,2]],[[1,0],[3,2]],[[2,0],[1,3]],[[3,0],[2,1]]];
+  state.group={ teams, table:teams.map(()=>({pts:0,w:0,d:0,l:0,gf:0,ga:0})), rounds, roundIdx:0, finished:false };
+  state.phase="groups";
+  pushLog("A fase de grupos começou! Seu time (OVR "+myStrength+") caiu num grupo com "+opps.map(o=>o.name).join(", ")+".");
+  render();
+}
+function simulateMyGroupMatch(){
+  const g=state.group;
+  if(g.roundIdx>=g.rounds.length) return;
+  const round = g.rounds[g.roundIdx];
+  round.forEach(([h,a])=>{
+    const th=g.teams[h], ta=g.teams[a];
+    const [gh,ga]=simulateMatch(th.str,ta.str);
+    const tabH=g.table[h], tabA=g.table[a];
+    tabH.gf+=gh; tabH.ga+=ga; tabA.gf+=ga; tabA.ga+=gh;
+    if(gh>ga){tabH.w++;tabH.pts+=3;tabA.l++;}
+    else if(gh<ga){tabA.w++;tabA.pts+=3;tabH.l++;}
+    else{tabH.d++;tabA.d++;tabH.pts++;tabA.pts++;}
+    const involvesMe = th.mine || ta.mine;
+    pushLog((involvesMe?"⭐ ":"")+`${th.name} ${gh} x ${ga} ${ta.name}`);
+  });
+  g.roundIdx++;
+  if(g.roundIdx>=g.rounds.length){ g.finished=true; evaluateGroupResult(); }
+  render();
+}
+function evaluateGroupResult(){
+  const g=state.group;
+  const ranked=g.teams.map((t,i)=>({...t, idx:i, ...g.table[i]})).sort((a,b)=> b.pts-a.pts || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf);
+  g.ranked=ranked;
+  const myRank=ranked.findIndex(t=>t.mine);
+  if(myRank<=1){
+    pushLog(`Classificado em ${myRank+1}º lugar do grupo! Rumo às oitavas de final.`);
+    state.knockout={ stageIdx:0, opponent:null, leg1:null, leg2:null, aggMine:0, aggOpp:0, resolved:false, wentToPens:false, wonPens:null, myStrength:teamStrength() };
+    generateKnockoutOpponent();
+    state.phase="knockout";
+  } else {
+    pushLog(`Eliminado na fase de grupos, terminando em ${myRank+1}º lugar.`);
+    state.finalResult="eliminated-groups";
+    state.phase="end";
+  }
+}
+function renderGroups(){
+  const g=state.group;
+  const rows = g.teams.map((t,i)=>({name:t.name, mine:t.mine, ...g.table[i]})).sort((a,b)=> b.pts-a.pts || (b.gf-b.ga)-(a.gf-a.ga) || b.gf-a.gf);
+  const tableHtml = `<table><thead><tr><th style="text-align:left;">Time</th><th>P</th><th>V</th><th>E</th><th>D</th><th>GP</th><th>GC</th><th>SG</th></tr></thead>
+    <tbody>${rows.map((r,i)=>`<tr class="${r.mine?'me':''} ${i<2 && g.finished?'qualified':''}">
+      <td class="tname">${r.name}</td><td>${r.pts}</td><td>${r.w}</td><td>${r.d}</td><td>${r.l}</td><td>${r.gf}</td><td>${r.ga}</td><td>${r.gf-r.ga}</td></tr>`).join("")}</tbody></table>`;
+  const canSim = !g.finished && g.roundIdx<g.rounds.length;
+  return `
+    <div class="panel">
+      <h2><b>Fase de Grupos</b> <small>Rodada ${Math.min(g.roundIdx+(canSim?1:0), g.rounds.length)}/${g.rounds.length}</small></h2>
+      ${tableHtml}
+      <div style="margin-top:16px;">
+        <button class="btn btn-gold btn-block" id="simRoundBtn" ${canSim?"":"disabled"}>
+          ${canSim ? `Simular meu próximo jogo (Rodada ${g.roundIdx+1}/${g.rounds.length})` : "Fase de Grupos Encerrada"}
+        </button>
+      </div>
+    </div>
+    <div class="panel"><h2><b>Súmula</b></h2><div class="log">${state.log.slice(0,14).map(l=>`<div>${l}</div>`).join("")}</div></div>
+  `;
+}
+
+/* ===================== MATA-MATA ===================== */
+function generateKnockoutOpponent(){
+  const k=state.knockout;
+  // A cada fase o adversário melhora bastante: Oitavas ainda ok -> Quartas dura -> Semi muito dura -> Final quase impossível
+  const rival = randomRivalTeam();
+  const cap = TIER_CAPS[rival.tier];
+  const desired = k.myStrength - 6 + (k.stageIdx*12) + rnd(-2,10);
+  k.opponent={name:rival.name+" "+rival.flag, str:Math.round(clamp(desired, cap.min, cap.max))};
+  k.leg1=null; k.leg2=null; k.aggMine=0; k.aggOpp=0; k.resolved=false; k.wentToPens=false; k.wonPens=null;
+}
+function simulateKnockoutLeg(legNum){
+  const k=state.knockout;
+  const isFinal = k.stageIdx===3;
+  if(isFinal){
+    const [gm,go]=simulateMatch(k.myStrength,k.opponent.str);
+    k.leg1={home:"Meu Time",away:k.opponent.name,gh:gm,ga:go,neutral:true};
+    k.aggMine=gm; k.aggOpp=go;
+    pushLog(`FINAL — Meu Time ${gm} x ${go} ${k.opponent.name}`);
+    resolveKnockout(); return;
+  }
+  if(legNum===1){
+    const [gm,go]=simulateMatch(k.myStrength,k.opponent.str);
+    k.leg1={home:"Meu Time",away:k.opponent.name,gh:gm,ga:go};
+    k.aggMine+=gm; k.aggOpp+=go;
+    pushLog(`${STAGES[1+k.stageIdx]} (Ida) — Meu Time ${gm} x ${go} ${k.opponent.name}`);
+  } else {
+    const [go,gm]=simulateMatch(k.opponent.str,k.myStrength);
+    k.leg2={home:k.opponent.name,away:"Meu Time",gh:go,ga:gm};
+    k.aggMine+=gm; k.aggOpp+=go;
+    pushLog(`${STAGES[1+k.stageIdx]} (Volta) — ${k.opponent.name} ${go} x ${gm} Meu Time`);
+    resolveKnockout();
+  }
+  render();
+}
+function resolveKnockout(){
+  const k=state.knockout;
+  let myWin;
+  if(k.aggMine===k.aggOpp){
+    k.wentToPens=true;
+    const probMine = clamp(0.5+(k.myStrength-k.opponent.str)*0.012,0.28,0.72);
+    myWin = Math.random()<probMine;
+    k.wonPens=myWin;
+    pushLog(myWin?`Vitória nos pênaltis contra ${k.opponent.name}!`:`Derrota nos pênaltis para ${k.opponent.name}.`);
+  } else { myWin = k.aggMine>k.aggOpp; }
+  k.resolved=true;
+  if(myWin){
+    pushLog(`Classificado para a próxima fase!`);
+    if(k.stageIdx===3){ state.finalResult="champion"; state.phase="end"; }
+  } else {
+    pushLog(`Eliminado n${STAGES[1+k.stageIdx]==="Oitavas"?"as":"a"} ${STAGES[1+k.stageIdx]}.`);
+    state.finalResult="eliminated-knockout";
+    state.phase="end";
+  }
+  render();
+}
+function advanceKnockout(){ state.knockout.stageIdx++; generateKnockoutOpponent(); render(); }
+function renderKnockout(){
+  const k=state.knockout;
+  const stageName=STAGES[1+k.stageIdx];
+  const isFinal=k.stageIdx===3;
+  let legsHtml="";
+  if(isFinal){
+    legsHtml = k.leg1 ? `
+      <div class="leg"><span>Meu Time</span><span class="lscore">${k.leg1.gh} x ${k.leg1.ga}</span><span>${k.opponent.name}</span></div>
+      ${k.wentToPens?`<div class="aggline"><span>Decidido nos pênaltis</span><b>${k.wonPens?"Meu Time venceu":k.opponent.name+" venceu"}</b></div>`:""}
+    ` : `<div style="color:var(--text-dim);font-size:13.5px;">Jogo único, em campo neutro.</div>`;
+  } else {
+    legsHtml = `
+      ${k.leg1?`<div class="leg"><span>Ida: Meu Time</span><span class="lscore">${k.leg1.gh} x ${k.leg1.ga}</span><span>${k.opponent.name}</span></div>`:`<div style="color:var(--text-dim);font-size:13px;">Jogo de ida ainda não disputado.</div>`}
+      ${k.leg2?`<div class="leg"><span>Volta: ${k.opponent.name}</span><span class="lscore">${k.leg2.gh} x ${k.leg2.ga}</span><span>Meu Time</span></div>`:""}
+      ${k.leg1 && k.leg2 ? `<div class="aggline"><span>Agregado</span><b>Meu Time ${k.aggMine} x ${k.aggOpp} ${k.opponent.name}</b></div>`:""}
+      ${k.wentToPens?`<div class="aggline"><span>Decidido nos pênaltis</span><b>${k.wonPens?"Meu Time venceu":k.opponent.name+" venceu"}</b></div>`:""}
+    `;
+  }
+  let actionBtn="";
+  if(!k.resolved){
+    if(isFinal) actionBtn = k.leg1 ? "" : `<button class="btn btn-gold btn-block" id="simLegBtn" data-leg="1">Simular a Final</button>`;
+    else if(!k.leg1) actionBtn = `<button class="btn btn-gold btn-block" id="simLegBtn" data-leg="1">Simular Jogo de Ida</button>`;
+    else if(!k.leg2) actionBtn = `<button class="btn btn-gold btn-block" id="simLegBtn" data-leg="2">Simular Jogo de Volta</button>`;
+  } else {
+    actionBtn = `<button class="btn btn-gold btn-block" id="nextStageBtn">Avançar para ${STAGES[2+k.stageIdx]||""} ➜</button>`;
+  }
+  return `
+    <div class="panel">
+      <h2><b>${stageName}</b> <small>Meu Time ${k.myStrength} × ${k.opponent.name} ${k.opponent.str}</small></h2>
+      <div class="tie"><div class="tt">${isFinal?"Jogo Único — Campo Neutro":"Confronto de ida e volta"}</div>${legsHtml}</div>
+      <div style="margin-top:14px;">${actionBtn}</div>
+    </div>
+    <div class="panel"><h2><b>Súmula</b></h2><div class="log">${state.log.slice(0,14).map(l=>`<div>${l}</div>`).join("")}</div></div>
+  `;
+}
+
+/* ===================== FIM DE JOGO ===================== */
+function renderEnd(){
+  if(state.finalResult==="champion"){
+    return `<div class="panel end-screen"><div class="trophy">${state.mode==="ucl"?"⭐":"🏆"}</div><h2>CAMPEÃO DA ${compName().toUpperCase()}!</h2>
+      <p>Seu elenco, montado com craques de diferentes clubes e épocas, conquistou o título continental. Um time histórico que nunca existiu, forjado por você.</p>
+      <button class="btn btn-gold" id="restartBtn">Montar um novo time</button></div>`;
+  }
+  const stageLost = state.knockout ? STAGES[1+state.knockout.stageIdx] : "Fase de Grupos";
+  return `<div class="panel end-screen"><div class="trophy">⚽</div><h2>Eliminado — ${stageLost}</h2>
+    <p>Sua jornada terminou aqui. Monte um novo elenco combinando outros craques de diferentes anos e tente novamente pelo título da ${compName()}.</p>
+    <button class="btn btn-gold" id="restartBtn">Tentar novamente</button></div>`;
+}
+
+/* ===================== EVENTOS ===================== */
+function bindEvents(){
+  const landingStartBtn=document.getElementById("landingStartBtn"); if(landingStartBtn) landingStartBtn.onclick=()=>{ state.phase="mode"; render(); };
+  document.querySelectorAll("[data-mode]").forEach(el=>{ el.onclick = ()=> chooseMode(el.getAttribute("data-mode")); });
+  document.querySelectorAll("[data-difficulty]").forEach(el=>{ el.onclick = ()=> chooseDifficulty(el.getAttribute("data-difficulty")); });
+  document.querySelectorAll("[data-formation]").forEach(el=>{ el.onclick = ()=> chooseFormation(el.getAttribute("data-formation")); });
+  const rollBtn=document.getElementById("rollBtn"); if(rollBtn) rollBtn.onclick=rollDice;
+  const rerollTeamBtn=document.getElementById("rerollTeamBtn"); if(rerollTeamBtn) rerollTeamBtn.onclick=rerollDifferentTeam;
+  const rerollYearBtn=document.getElementById("rerollYearBtn"); if(rerollYearBtn) rerollYearBtn.onclick=rerollSameTeamOtherYear;
+  document.querySelectorAll("[data-pick]").forEach(row=>{ row.onclick=()=>selectPlayer(row.getAttribute("data-pick")); });
+  document.querySelectorAll("[data-slot]").forEach(el=>{ el.onclick=()=>slotClicked(parseInt(el.getAttribute("data-slot"))); });
+  document.querySelectorAll("[data-slotmove]").forEach(el=>{ el.onclick=()=>slotClicked(parseInt(el.getAttribute("data-slotmove"))); });
+  const resetDraftBtn=document.getElementById("resetDraftBtn"); if(resetDraftBtn) resetDraftBtn.onclick=resetDraft;
+  const startBtn=document.getElementById("startBtn"); if(startBtn) startBtn.onclick=startTournament;
+  const simRoundBtn=document.getElementById("simRoundBtn"); if(simRoundBtn) simRoundBtn.onclick=simulateMyGroupMatch;
+  const simLegBtn=document.getElementById("simLegBtn"); if(simLegBtn) simLegBtn.onclick=()=>simulateKnockoutLeg(parseInt(simLegBtn.getAttribute("data-leg")));
+  const nextStageBtn=document.getElementById("nextStageBtn"); if(nextStageBtn) nextStageBtn.onclick=advanceKnockout;
+  const restartBtn=document.getElementById("restartBtn"); if(restartBtn) restartBtn.onclick=fullRestart;
+}
+
+render();
+</script>
+</body>
+</html>
