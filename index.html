@@ -31,6 +31,18 @@
     --text-dim:#8ea3cf;
     --danger:#e0483a;
   }
+  body.theme-brasil{
+    --bg:#052e14;
+    --panel:#0a4020;
+    --panel2:#0d5127;
+    --border:#1f7a3d;
+    --gold:#ffe600;
+    --gold-bright:#fff67a;
+    --gold-dim:#c9b400;
+    --text:#f2fff0;
+    --text-dim:#a9dcb0;
+    --danger:#ff6b4a;
+  }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;min-height:100vh;}
@@ -176,6 +188,51 @@
 
   ::-webkit-scrollbar{width:7px;}
   ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+  /* ===== Ajustes específicos para celular (não afeta tablet/iPad) ===== */
+  @media(max-width:600px){
+    .navbar{padding:10px 12px;}
+    .brand{gap:6px;}
+    .brand .mark{font-size:19px;}
+    .brand .txt{font-size:12.5px;}
+    .navbar .pill{font-size:9.5px;padding:5px 9px;}
+    .subbanner{padding:8px 10px;font-size:10px;gap:6px;letter-spacing:.03em;line-height:1.4;}
+    .stagebar{padding:10px 8px 0;gap:4px;}
+    .stagebar .stg{padding:5px 9px;font-size:10px;}
+    .wrap, #app{padding-left:0;padding-right:0;}
+    .panel{padding:14px;margin:10px 10px;border-radius:8px;}
+    .panel h2{font-size:11px;margin-bottom:10px;padding-bottom:8px;}
+    .panel h2 b{font-size:13px;}
+    .layout3{padding:10px 10px 4px;gap:10px;}
+    .right-panel{padding:12px;}
+    .pitch-col{max-width:230px;}
+    .slot{width:38px;min-height:38px;font-size:7px;padding:1px;}
+    .slot-name{font-size:6.5px;}
+    .slot-ovr{font-size:9px;}
+    .drawcard{padding:12px;}
+    .badge{width:44px;height:44px;font-size:12px;}
+    .tname{font-size:18px;}
+    .prow{padding:9px 2px;gap:6px;}
+    .prow .nm{font-size:12.5px;}
+    .prow .pc{font-size:9px;}
+    .prow .ov{font-size:15px;width:24px;}
+    .boxrow{font-size:11px;padding:5px 2px;}
+    .btn{font-size:12.5px;padding:10px 12px;}
+    .fs-title{font-size:16px;padding:16px 12px 0;}
+    .formgrid{padding:16px 12px;gap:10px;grid-template-columns:1fr;}
+    .formcard{padding:14px;}
+    .formcard .fname{font-size:17px;}
+    .formcard .fdesc{font-size:11.5px;}
+    table{font-size:11px;}
+    th,td{padding:6px 3px;}
+    th{font-size:9px;}
+    .leg{font-size:11.5px;flex-wrap:wrap;gap:2px 6px;}
+    .leg .lscore{width:100%;order:1;text-align:center;font-size:15px;}
+    .tie{padding:12px;}
+    .matchcard{padding:8px 10px;font-size:12px;}
+    .end-screen{padding:30px 12px;}
+    .end-screen .trophy{font-size:42px;}
+  }
 </style>
 <script type="module">
   // Firebase (usado pelo Modo Online — salas 1x1 ao vivo)
@@ -507,7 +564,7 @@ const LIBERTADORES_TEAMS = [
   {name:"Hugo Gatti", pos:["GOL"], ovr:83},{name:"Rubén Suñé", pos:["LATD"], ovr:75},
   {name:"Vicente Pernía", pos:["ZAG"], ovr:78},{name:"Ángel Rodríguez", pos:["ZAG"], ovr:76},
   {name:"Alberto Tarantini", pos:["LATE","ZAG"], ovr:81},{name:"Miguel Ángel Giachello", pos:["VOL"], ovr:75},
-  {name:"Rubén Suñé", pos:["MEI"], ovr:76},{name:"Ubaldo Fillol", pos:["GOL"], ovr:85},
+  {name:"Rubén Trotta", pos:["MEI"], ovr:76},{name:"Roberto Rogel", pos:["CA"], ovr:79},
   {name:"Salvador Ponce", pos:["MEI","PE"], ovr:79},{name:"Ricardo Bochini", pos:["MEI"], ovr:82},
 ]},
 {team:"Flamengo", year:2022, players:[
@@ -911,163 +968,163 @@ const CHAMPIONS_TEAMS = [
 
 // tier 3 = grande/tradicional, tier 2 = médio, tier 1 = pequeno (nunca deve ter overall alto)
 const BRASIL_TEAMS = [
-{team:"Flamengo", year:2023, players:[
+{team:"Flamengo", year:2009, players:[
   {name:"Rossi", pos:["GOL"], ovr:84},{name:"Varela", pos:["LATD"], ovr:79},
   {name:"David Luiz", pos:["ZAG"], ovr:82},{name:"Fabrício Bruno", pos:["ZAG"], ovr:78},
   {name:"Ayrton Lucas", pos:["LATE"], ovr:78},{name:"Erick Pulgar", pos:["VOL"], ovr:79},
   {name:"Everton Ribeiro", pos:["MEI","PD"], ovr:82},{name:"Pedro", pos:["CA"], ovr:85},
 ]},
-{team:"Palmeiras", year:2023, players:[
+{team:"Palmeiras", year:2018, players:[
   {name:"Weverton", pos:["GOL"], ovr:82},{name:"Marcos Rocha", pos:["LATD"], ovr:76},
   {name:"Murilo", pos:["ZAG"], ovr:78},{name:"Gustavo Gómez", pos:["ZAG"], ovr:82},
   {name:"Piquerez", pos:["LATE"], ovr:78},{name:"Zé Rafael", pos:["VOL","MEI"], ovr:79},
   {name:"Raphael Veiga", pos:["MEI","PE"], ovr:84},{name:"Endrick", pos:["CA"], ovr:83},
 ]},
-{team:"São Paulo", year:2023, players:[
+{team:"São Paulo", year:2006, players:[
   {name:"Rafael", pos:["GOL"], ovr:78},{name:"Rafinha", pos:["LATD"], ovr:78},
   {name:"Arboleda", pos:["ZAG"], ovr:79},{name:"Diego Costa", pos:["ZAG"], ovr:74},
   {name:"Welington", pos:["LATE"], ovr:76},{name:"Alisson", pos:["VOL"], ovr:78},
   {name:"Lucas Moura", pos:["MEI","PD","PE"], ovr:82},{name:"Calleri", pos:["CA"], ovr:80},
 ]},
-{team:"Santos", year:2023, players:[
+{team:"Santos", year:2012, players:[
   {name:"João Paulo", pos:["GOL"], ovr:74},{name:"Madson", pos:["LATD"], ovr:73},
   {name:"Messias", pos:["ZAG"], ovr:72},{name:"Joaquim", pos:["ZAG"], ovr:73},
   {name:"Escobar", pos:["LATE"], ovr:72},{name:"Camacho", pos:["VOL"], ovr:74},
   {name:"Lucas Lima", pos:["MEI","PE"], ovr:76},{name:"Marcos Leonardo", pos:["CA"], ovr:80},
 ]},
-{team:"Corinthians", year:2023, players:[
+{team:"Corinthians", year:2017, players:[
   {name:"Cássio", pos:["GOL"], ovr:80},{name:"Fagner", pos:["LATD"], ovr:77},
   {name:"Gil", pos:["ZAG"], ovr:76},{name:"Bruno Méndez", pos:["ZAG"], ovr:76},
   {name:"Fábio Santos", pos:["LATE"], ovr:74},{name:"Fausto Vera", pos:["VOL","MEI"], ovr:78},
   {name:"Renato Augusto", pos:["MEI","VOL"], ovr:79},{name:"Yuri Alberto", pos:["CA"], ovr:80},
 ]},
-{team:"Grêmio", year:2023, players:[
+{team:"Grêmio", year:2018, players:[
   {name:"Marchesín", pos:["GOL"], ovr:79},{name:"João Pedro", pos:["LATD"], ovr:74},
   {name:"Geromel", pos:["ZAG"], ovr:79},{name:"Kannemann", pos:["ZAG"], ovr:80},
   {name:"Reinaldo", pos:["LATE"], ovr:76},{name:"Villasanti", pos:["VOL"], ovr:78},
   {name:"Cristaldo", pos:["MEI","PE"], ovr:79},{name:"Luis Suárez", pos:["CA","PE"], ovr:85},
 ]},
-{team:"Internacional", year:2023, players:[
+{team:"Internacional", year:2015, players:[
   {name:"Rochet", pos:["GOL"], ovr:77},{name:"Bustos", pos:["LATD"], ovr:75},
   {name:"Vitão", pos:["ZAG"], ovr:76},{name:"Mercado", pos:["ZAG"], ovr:76},
   {name:"Renê", pos:["LATE"], ovr:74},{name:"Fernando", pos:["VOL"], ovr:77},
   {name:"Alan Patrick", pos:["MEI","PE"], ovr:78},{name:"Enner Valencia", pos:["CA"], ovr:79},
 ]},
-{team:"Cruzeiro", year:2023, players:[
+{team:"Cruzeiro", year:2022, players:[
   {name:"Rafael Cabral", pos:["GOL"], ovr:76},{name:"Marlon", pos:["LATD"], ovr:74},
   {name:"Zé Ivaldo", pos:["ZAG"], ovr:73},{name:"William", pos:["ZAG"], ovr:73},
   {name:"Cacá", pos:["LATE"], ovr:73},{name:"Ramiro", pos:["VOL","MEI"], ovr:75},
   {name:"Matheus Pereira", pos:["MEI","PE"], ovr:78},{name:"Gabigol", pos:["CA"], ovr:80},
 ]},
-{team:"Vasco da Gama", year:2023, players:[
+{team:"Vasco da Gama", year:2016, players:[
   {name:"Léo Jardim", pos:["GOL"], ovr:75},{name:"Puma Rodríguez", pos:["LATD"], ovr:73},
   {name:"João Victor", pos:["ZAG"], ovr:76},{name:"Maicon", pos:["ZAG"], ovr:73},
   {name:"Paulo Henrique", pos:["LATE"], ovr:72},{name:"Zé Gabriel", pos:["VOL"], ovr:73},
   {name:"Payet", pos:["MEI","PE"], ovr:79},{name:"Pedro Raul", pos:["CA"], ovr:74},
 ]},
-{team:"Atlético Mineiro", year:2023, players:[
+{team:"Atlético Mineiro", year:2012, players:[
   {name:"Everson", pos:["GOL"], ovr:78},{name:"Mariano", pos:["LATD"], ovr:75},
   {name:"Bruno Fuchs", pos:["ZAG"], ovr:74},{name:"Battaglia", pos:["ZAG"], ovr:76},
   {name:"Guilherme Arana", pos:["LATE","PE"], ovr:79},{name:"Otávio", pos:["VOL","MEI"], ovr:78},
   {name:"Igor Gomes", pos:["MEI"], ovr:74},{name:"Hulk", pos:["CA","PD"], ovr:84},
 ]},
-{team:"Fluminense", year:2023, players:[
+{team:"Fluminense", year:2010, players:[
   {name:"Fábio", pos:["GOL"], ovr:82},{name:"Samuel Xavier", pos:["LATD"], ovr:77},
   {name:"Nino", pos:["ZAG"], ovr:81},{name:"Felipe Melo", pos:["ZAG","VOL"], ovr:80},
   {name:"Marcelo", pos:["LATE","PE"], ovr:78},{name:"André", pos:["VOL","MEI"], ovr:80},
   {name:"Ganso", pos:["MEI","PE"], ovr:82},{name:"Germán Cano", pos:["CA"], ovr:85},
 ]},
-{team:"Botafogo", year:2023, players:[
+{team:"Botafogo", year:2013, players:[
   {name:"Lucas Perri", pos:["GOL"], ovr:77},{name:"Rafael", pos:["LATD"], ovr:73},
   {name:"Adryelson", pos:["ZAG"], ovr:75},{name:"Bastos", pos:["ZAG"], ovr:76},
   {name:"Marçal", pos:["LATE"], ovr:73},{name:"Gregore", pos:["VOL"], ovr:77},
   {name:"Eduardo", pos:["MEI","PE"], ovr:77},{name:"Tiquinho Soares", pos:["CA"], ovr:80},
 ]},
-{team:"Bahia", year:2023, players:[
+{team:"Bahia", year:2022, players:[
   {name:"Marcos Felipe", pos:["GOL"], ovr:74},{name:"Cicinho", pos:["LATD"], ovr:74},
   {name:"Kanu", pos:["ZAG"], ovr:74},{name:"Gabriel Xavier", pos:["ZAG"], ovr:73},
   {name:"Ryan", pos:["LATE"], ovr:72},{name:"Yago Felipe", pos:["VOL","MEI"], ovr:75},
   {name:"Cauly", pos:["MEI","PE"], ovr:76},{name:"Everaldo", pos:["CA"], ovr:76},
 ]},
-{team:"Sport Recife", year:2023, players:[
+{team:"Sport Recife", year:2014, players:[
   {name:"Caíque França", pos:["GOL"], ovr:73},{name:"Wallace", pos:["LATD"], ovr:72},
   {name:"Sabino", pos:["ZAG"], ovr:74},{name:"Ewerthon", pos:["ZAG"], ovr:72},
   {name:"Fabiano Souza", pos:["LATE"], ovr:71},{name:"Fábio Matheus", pos:["VOL"], ovr:72},
   {name:"Alesson", pos:["MEI","PE"], ovr:74},{name:"Vagner Love", pos:["CA"], ovr:78},
 ]},
-{team:"Náutico", year:2023, players:[
+{team:"Náutico", year:2019, players:[
   {name:"Muriel", pos:["GOL"], ovr:72},{name:"Jefferson", pos:["LATD"], ovr:70},
   {name:"Guilherme Santos", pos:["ZAG"], ovr:71},{name:"Bruno Ferreira", pos:["ZAG"], ovr:71},
   {name:"Julio César", pos:["LATE"], ovr:70},{name:"Rafael Vaz", pos:["VOL"], ovr:71},
   {name:"Hereda", pos:["MEI","PE"], ovr:72},{name:"Vinícius Leite", pos:["CA"], ovr:73},
 ]},
-{team:"Ceará", year:2023, players:[
+{team:"Ceará", year:2020, players:[
   {name:"João Ricardo", pos:["GOL"], ovr:76},{name:"Michel Macedo", pos:["LATD"], ovr:72},
   {name:"Luiz Otávio", pos:["ZAG"], ovr:73},{name:"David Ribeiro", pos:["ZAG"], ovr:72},
   {name:"Matheus Bahia", pos:["LATE"], ovr:73},{name:"Richardson", pos:["VOL"], ovr:74},
   {name:"Lima", pos:["MEI","PE"], ovr:74},{name:"Erick", pos:["CA"], ovr:74},
 ]},
-{team:"Fortaleza", year:2023, players:[
+{team:"Fortaleza", year:2022, players:[
   {name:"Fernando Miguel", pos:["GOL"], ovr:75},{name:"Tinga", pos:["LATD"], ovr:74},
   {name:"Titi", pos:["ZAG"], ovr:73},{name:"Brítez", pos:["ZAG"], ovr:74},
   {name:"Bruno Pacheco", pos:["LATE"], ovr:73},{name:"Zé Welison", pos:["VOL"], ovr:74},
   {name:"Yago Pikachu", pos:["MEI","PD","PE"], ovr:76},{name:"Lucero", pos:["CA"], ovr:77},
 ]},
-{team:"Vitória", year:2023, players:[
+{team:"Vitória", year:1993, players:[
   {name:"Lucas Arcanjo", pos:["GOL"], ovr:72},{name:"Van", pos:["LATD"], ovr:71},
   {name:"Wagner Leonardo", pos:["ZAG"], ovr:72},{name:"Camutanga", pos:["ZAG"], ovr:72},
   {name:"Ramon", pos:["LATE"], ovr:71},{name:"Willian Oliveira", pos:["VOL"], ovr:72},
   {name:"Matheusinho", pos:["MEI","PE"], ovr:74},{name:"Osvaldo", pos:["CA"], ovr:75},
 ]},
-{team:"Bragantino", year:2023, players:[
+{team:"Bragantino", year:2021, players:[
   {name:"Cleiton", pos:["GOL"], ovr:75},{name:"Nico Hernández", pos:["LATD"], ovr:73},
   {name:"Léo Ortiz", pos:["ZAG"], ovr:76},{name:"Lucas Cunha", pos:["ZAG"], ovr:73},
   {name:"Juninho Capixaba", pos:["LATE"], ovr:74},{name:"Raul", pos:["VOL","MEI"], ovr:75},
   {name:"Eric Ramires", pos:["MEI","PE"], ovr:74},{name:"Eduardo Sasha", pos:["CA"], ovr:76},
 ]},
-{team:"Athletico Paranaense", year:2023, players:[
+{team:"Athletico Paranaense", year:2022, players:[
   {name:"Bento", pos:["GOL"], ovr:76},{name:"Esquivel", pos:["LATD"], ovr:74},
   {name:"Thiago Heleno", pos:["ZAG"], ovr:75},{name:"Kaique Rocha", pos:["ZAG"], ovr:73},
   {name:"Khellven", pos:["LATE","LATD"], ovr:74},{name:"Fernandinho", pos:["VOL"], ovr:78},
   {name:"Canobbio", pos:["MEI","PE"], ovr:76},{name:"Pablo", pos:["CA"], ovr:76},
 ]},
-{team:"Coritiba", year:2023, players:[
+{team:"Coritiba", year:1985, players:[
   {name:"Gabriel Vasconcelos", pos:["GOL"], ovr:72},{name:"Natanael", pos:["LATD"], ovr:72},
   {name:"Machado", pos:["ZAG"], ovr:72},{name:"Zeca", pos:["ZAG"], ovr:74},
   {name:"Bryan Garcia", pos:["LATE"], ovr:71},{name:"William Farias", pos:["VOL"], ovr:72},
   {name:"Robson", pos:["MEI","PE"], ovr:73},{name:"Alef Manga", pos:["CA"], ovr:75},
 ]},
-{team:"Goiás", year:2023, players:[
+{team:"Goiás", year:2010, players:[
   {name:"Tadeu", pos:["GOL"], ovr:74},{name:"Halter", pos:["LATD"], ovr:71},
   {name:"Diego Guerra", pos:["ZAG"], ovr:72},{name:"Fabrício Daniel", pos:["ZAG"], ovr:72},
   {name:"Sidcley", pos:["LATE"], ovr:73},{name:"Caetano", pos:["VOL"], ovr:72},
   {name:"Rildo", pos:["MEI","PE"], ovr:73},{name:"Guilherme Alcântara", pos:["CA"], ovr:73},
 ]},
-{team:"Atlético Goianiense", year:2023, players:[
+{team:"Atlético Goianiense", year:2021, players:[
   {name:"Ronaldo", pos:["GOL"], ovr:73},{name:"Réginer", pos:["LATD"], ovr:71},
   {name:"Wanderson", pos:["ZAG"], ovr:72},{name:"Klaus", pos:["ZAG"], ovr:73},
   {name:"Pedro Henrique", pos:["LATE"], ovr:71},{name:"Willian Formiga", pos:["VOL"], ovr:72},
   {name:"Zé Roberto", pos:["MEI","PE"], ovr:73},{name:"Élton", pos:["CA"], ovr:74},
 ]},
-{team:"Cuiabá", year:2023, players:[
+{team:"Cuiabá", year:2022, players:[
   {name:"Walter", pos:["GOL"], ovr:76},{name:"João Lucas", pos:["LATD"], ovr:72},
   {name:"Marllon", pos:["ZAG"], ovr:73},{name:"Alan Empereur", pos:["ZAG"], ovr:74},
   {name:"Uendel", pos:["LATE"], ovr:73},{name:"Lucas Mineiro", pos:["VOL"], ovr:73},
   {name:"Camilo", pos:["VOL","MEI"], ovr:74},{name:"Deyverson", pos:["CA"], ovr:78},
 ]},
-{team:"Juventude", year:2023, players:[
+{team:"Juventude", year:2021, players:[
   {name:"Gabriel", pos:["GOL"], ovr:73},{name:"Jadson", pos:["LATD"], ovr:71},
   {name:"Rodrigo", pos:["ZAG"], ovr:72},{name:"Moacir", pos:["ZAG"], ovr:72},
   {name:"Danilo Boza", pos:["LATE"], ovr:72},{name:"Jean Irmer", pos:["VOL"], ovr:72},
   {name:"Chico", pos:["MEI","PE"], ovr:73},{name:"Ronaldo Alves", pos:["CA"], ovr:74},
 ]},
-{team:"Chapecoense", year:2023, players:[
+{team:"Chapecoense", year:2014, players:[
   {name:"Gilvan", pos:["GOL"], ovr:72},{name:"Fabiano", pos:["LATD"], ovr:71},
   {name:"Anderson Conceição", pos:["ZAG"], ovr:72},{name:"Ferreira", pos:["ZAG"], ovr:71},
   {name:"Reinaldo Junior", pos:["LATE"], ovr:71},{name:"Geraldo", pos:["VOL"], ovr:71},
   {name:"Perotti", pos:["MEI","PE"], ovr:74},{name:"Anselmo Ramon", pos:["CA"], ovr:74},
 ]},
-{team:"Avaí", year:2023, players:[
+{team:"Avaí", year:2009, players:[
   {name:"Vladimir", pos:["GOL"], ovr:74},{name:"Alan Santos", pos:["LATD"], ovr:71},
   {name:"Rodrigo Andrade", pos:["ZAG"], ovr:72},{name:"Betão", pos:["ZAG"], ovr:72},
   {name:"Denner", pos:["LATE"], ovr:71},{name:"Lourenço", pos:["VOL"], ovr:72},
@@ -1079,13 +1136,13 @@ const BRASIL_TEAMS = [
   {name:"Nadson", pos:["LATE"], ovr:71},{name:"Marcelo Costa", pos:["VOL"], ovr:71},
   {name:"Marquinhos", pos:["MEI","PE"], ovr:73},{name:"Rafael Costa", pos:["CA"], ovr:73},
 ]},
-{team:"Ponte Preta", year:2023, players:[
+{team:"Ponte Preta", year:2015, players:[
   {name:"Ivan", pos:["GOL"], ovr:72},{name:"Lucas Ramon", pos:["LATD"], ovr:71},
   {name:"Yuri", pos:["ZAG"], ovr:71},{name:"Rafael Longuine", pos:["ZAG"], ovr:71},
   {name:"João Vieira", pos:["LATE"], ovr:71},{name:"Elvis", pos:["VOL"], ovr:72},
   {name:"Danilo Pires", pos:["MEI","PE"], ovr:72},{name:"Rodrigo Sam", pos:["CA"], ovr:74},
 ]},
-{team:"Guarani", year:2023, players:[
+{team:"Guarani", year:1978, players:[
   {name:"Douglas Borges", pos:["GOL"], ovr:72},{name:"Baraka", pos:["LATD"], ovr:71},
   {name:"Bruno Collaço", pos:["ZAG"], ovr:71},{name:"Diego Ivo", pos:["ZAG"], ovr:72},
   {name:"Robert", pos:["LATE"], ovr:71},{name:"Rodrigo", pos:["VOL"], ovr:71},
@@ -1097,73 +1154,73 @@ const BRASIL_TEAMS = [
   {name:"Fabrício", pos:["LATE"], ovr:71},{name:"Marcinho", pos:["VOL"], ovr:72},
   {name:"Diego Renan", pos:["MEI","PE"], ovr:73},{name:"Alan Kardec", pos:["CA"], ovr:76},
 ]},
-{team:"América Mineiro", year:2023, players:[
+{team:"América Mineiro", year:1971, players:[
   {name:"Matheus Cavichioli", pos:["GOL"], ovr:73},{name:"Marlon", pos:["LATD"], ovr:72},
   {name:"Iago Maidana", pos:["ZAG"], ovr:73},{name:"Eduardo Bauermann", pos:["ZAG"], ovr:74},
   {name:"Patric", pos:["LATE"], ovr:72},{name:"Juninho", pos:["VOL","MEI"], ovr:73},
   {name:"Adyson", pos:["MEI","PE"], ovr:73},{name:"Aloísio", pos:["CA"], ovr:75},
 ]},
-{team:"Criciúma", year:2023, players:[
+{team:"Criciúma", year:2004, players:[
   {name:"Gustavo", pos:["GOL"], ovr:72},{name:"Lucas Freitas", pos:["LATD"], ovr:71},
   {name:"Ronald", pos:["ZAG"], ovr:71},{name:"Marcelo Benevenuto", pos:["ZAG"], ovr:72},
   {name:"Bruno Cesar", pos:["LATE"], ovr:71},{name:"Fellipe Mateus", pos:["VOL"], ovr:72},
   {name:"Marquinhos Gabriel", pos:["MEI","PE"], ovr:73},{name:"Erick Farias", pos:["CA"], ovr:75},
 ]},
-{team:"CSA", year:2023, players:[
+{team:"CSA", year:2018, players:[
   {name:"Douglas Pombo", pos:["GOL"], ovr:71},{name:"Bruno Ré", pos:["LATD"], ovr:70},
   {name:"Alan Costa", pos:["ZAG"], ovr:71},{name:"Reginaldo", pos:["ZAG"], ovr:71},
   {name:"Marlon Alves", pos:["LATE"], ovr:70},{name:"Rodrigo Vitor", pos:["VOL"], ovr:71},
   {name:"Rafael Longuine", pos:["MEI","PE"], ovr:71},{name:"Rafael Costa", pos:["CA"], ovr:73},
 ]},
-{team:"Sampaio Corrêa", year:2023, players:[
+{team:"Sampaio Corrêa", year:2017, players:[
   {name:"Matheus Nogueira", pos:["GOL"], ovr:71},{name:"Michel Douglas", pos:["LATD"], ovr:70},
   {name:"Igor Fernandes", pos:["ZAG"], ovr:71},{name:"Rafael Jansen", pos:["ZAG"], ovr:71},
   {name:"Fábio Alves", pos:["LATE"], ovr:70},{name:"Serginho", pos:["VOL"], ovr:71},
   {name:"Rafael Costa", pos:["MEI","PE"], ovr:71},{name:"Diego Rosa", pos:["CA"], ovr:73},
 ]},
-{team:"Paysandu", year:2023, players:[
+{team:"Paysandu", year:2003, players:[
   {name:"Thiago Coelho", pos:["GOL"], ovr:71},{name:"Ruan", pos:["LATD"], ovr:70},
   {name:"Fabrício Bahia", pos:["ZAG"], ovr:71},{name:"Perema", pos:["ZAG"], ovr:71},
   {name:"Igor Formiga", pos:["LATE"], ovr:70},{name:"Vinícius Kiss", pos:["VOL"], ovr:71},
   {name:"Robinho", pos:["MEI","PE"], ovr:73},{name:"Nicolas", pos:["CA"], ovr:74},
 ]},
-{team:"Remo", year:2023, players:[
+{team:"Remo", year:2021, players:[
   {name:"Vinícius", pos:["GOL"], ovr:71},{name:"Kevin", pos:["LATD"], ovr:70},
   {name:"Marcelo Rangel", pos:["ZAG"], ovr:71},{name:"Rafael Bilu", pos:["ZAG"], ovr:71},
   {name:"Paulo Sérgio", pos:["LATE"], ovr:70},{name:"Naldo", pos:["VOL"], ovr:71},
   {name:"Matheus Puxatu", pos:["MEI","PE"], ovr:73},{name:"Renan Gorne", pos:["CA"], ovr:74},
 ]},
-{team:"ABC", year:2023, players:[
+{team:"ABC", year:2011, players:[
   {name:"Marcelo Pitol", pos:["GOL"], ovr:71},{name:"Ítalo", pos:["LATD"], ovr:70},
   {name:"Vinicius Alves", pos:["ZAG"], ovr:70},{name:"Toty", pos:["ZAG"], ovr:70},
   {name:"Nino Paraíba", pos:["LATE"], ovr:71},{name:"Rafael Souza", pos:["VOL"], ovr:70},
   {name:"Iarley", pos:["MEI","PE"], ovr:72},{name:"Everton Sena", pos:["CA"], ovr:73},
 ]},
-{team:"Vila Nova", year:2023, players:[
+{team:"Vila Nova", year:2019, players:[
   {name:"Rafael", pos:["GOL"], ovr:70},{name:"Léo Passos", pos:["LATD"], ovr:70},
   {name:"Higor Meritão", pos:["ZAG"], ovr:70},{name:"Wallber", pos:["ZAG"], ovr:70},
   {name:"Diego Tavares", pos:["LATE"], ovr:70},{name:"Marlon Silva", pos:["VOL"], ovr:71},
   {name:"Rodrigo Bahia", pos:["MEI","PE"], ovr:71},{name:"Copete", pos:["CA"], ovr:73},
 ]},
-{team:"Operário-PR", year:2023, players:[
+{team:"Operário-PR", year:2020, players:[
   {name:"Iago", pos:["GOL"], ovr:70},{name:"Rafael Ribeiro", pos:["LATD"], ovr:70},
   {name:"Bruno Rodrigues", pos:["ZAG"], ovr:70},{name:"Bruno Melo", pos:["ZAG"], ovr:70},
   {name:"Boschilia", pos:["LATE","MEI"], ovr:72},{name:"Islan", pos:["VOL"], ovr:71},
   {name:"Neto Pessoa", pos:["MEI","PE"], ovr:71},{name:"Rodrigo Sam", pos:["CA"], ovr:72},
 ]},
-{team:"Londrina", year:2023, players:[
+{team:"Londrina", year:2021, players:[
   {name:"João Carlos", pos:["GOL"], ovr:70},{name:"Weliton", pos:["LATD"], ovr:70},
   {name:"Robson Reis", pos:["ZAG"], ovr:70},{name:"Cléo Silva", pos:["ZAG"], ovr:70},
   {name:"Kadu", pos:["LATE"], ovr:70},{name:"Rhuan", pos:["VOL"], ovr:70},
   {name:"Rafael Silva", pos:["MEI","PE"], ovr:71},{name:"Rafael Furlan", pos:["CA"], ovr:72},
 ]},
-{team:"Confiança", year:2023, players:[
+{team:"Confiança", year:2019, players:[
   {name:"Bruno Pianissolla", pos:["GOL"], ovr:70},{name:"Val Barreto", pos:["LATD"], ovr:70},
   {name:"Alan Mineiro", pos:["ZAG"], ovr:70},{name:"Betinho", pos:["ZAG"], ovr:70},
   {name:"Rafael Vieira", pos:["LATE"], ovr:70},{name:"Rondinelly", pos:["VOL"], ovr:70},
   {name:"Guilherme Queiroz", pos:["MEI","PE"], ovr:71},{name:"Elton", pos:["CA"], ovr:72},
 ]},
-{team:"CRB", year:2023, players:[
+{team:"CRB", year:2021, players:[
   {name:"Diogo Silva", pos:["GOL"], ovr:71},{name:"Vitor Feijão", pos:["LATD"], ovr:70},
   {name:"Jonathan", pos:["ZAG"], ovr:71},{name:"Léo Rosa", pos:["ZAG"], ovr:71},
   {name:"Marllon", pos:["LATE"], ovr:70},{name:"Auremir", pos:["VOL"], ovr:72},
@@ -1283,7 +1340,417 @@ const BRASIL_TEAMS = [
   {name:"Odvan", pos:["LATE"], ovr:72},{name:"Márcio Nunes", pos:["VOL"], ovr:74},
   {name:"Válber", pos:["MEI","PE"], ovr:75},{name:"Nilson Correa", pos:["CA"], ovr:76},
 ]},
+{team:"Sport Recife", year:1989, players:[
+  {name:"Paulo Sérgio", pos:["GOL"], ovr:74},{name:"Batista", pos:["LATD"], ovr:72},
+  {name:"Jorginho", pos:["ZAG"], ovr:73},{name:"Ilan", pos:["ZAG"], ovr:73},
+  {name:"Josimar", pos:["LATE"], ovr:72},{name:"Charles", pos:["VOL"], ovr:73},
+  {name:"Nirley", pos:["CA"], ovr:76},
+]},
+{team:"Flamengo", year:1990, players:[
+  {name:"Zé Carlos", pos:["GOL"], ovr:76},{name:"Ronaldão", pos:["LATD"], ovr:74},
+  {name:"Aldair", pos:["ZAG"], ovr:82},{name:"André Cruz", pos:["ZAG"], ovr:78},
+  {name:"Júnior", pos:["LATE","MEI"], ovr:82},{name:"Jorginho", pos:["VOL"], ovr:76},
+  {name:"Bebeto", pos:["MEI","CA"], ovr:84},{name:"Renato Gaúcho", pos:["CA","MEI","PE"], ovr:83},
+]},
+{team:"Goiás", year:1990, players:[
+  {name:"Sidney", pos:["GOL"], ovr:73},{name:"Índio", pos:["LATD"], ovr:71},
+  {name:"Wilson Fernando", pos:["ZAG"], ovr:72},{name:"Marcelo Passos", pos:["ZAG"], ovr:72},
+  {name:"Adriano", pos:["LATE"], ovr:71},{name:"Jorge Luís", pos:["VOL"], ovr:72},
+  {name:"Nunes", pos:["CA"], ovr:75},
+]},
+{team:"Criciúma", year:1991, players:[
+  {name:"Ronaldo", pos:["GOL"], ovr:76},{name:"Zinho", pos:["LATD"], ovr:73},
+  {name:"Vinícius", pos:["ZAG"], ovr:74},{name:"Marcão", pos:["ZAG"], ovr:74},
+  {name:"Da Silva", pos:["LATE"], ovr:73},{name:"Betinho", pos:["VOL"], ovr:74},
+  {name:"André Luís", pos:["CA"], ovr:78},
+]},
+{team:"Grêmio", year:1991, players:[
+  {name:"Mazaropi", pos:["GOL"], ovr:78},{name:"Alexandre", pos:["LATD"], ovr:72},
+  {name:"Adilson", pos:["ZAG"], ovr:74},{name:"Fábio Baiano", pos:["ZAG"], ovr:73},
+  {name:"Adãozinho", pos:["LATE"], ovr:73},{name:"Aristizábal", pos:["VOL"], ovr:74},
+  {name:"Nen", pos:["CA"], ovr:77},
+]},
+{team:"Fluminense", year:1992, players:[
+  {name:"Sinval", pos:["GOL"], ovr:74},{name:"Ailton", pos:["LATD"], ovr:73},
+  {name:"Ricardo Rocha", pos:["ZAG"], ovr:78},{name:"Válber", pos:["ZAG"], ovr:75},
+  {name:"Cristiano", pos:["LATE"], ovr:73},{name:"Zaniboni", pos:["VOL"], ovr:74},
+  {name:"Marcelo Santos", pos:["CA"], ovr:76},
+]},
+{team:"Cruzeiro", year:1993, players:[
+  {name:"Roberto", pos:["GOL"], ovr:76},{name:"Sorato", pos:["LATD"], ovr:73},
+  {name:"Cléber", pos:["ZAG"], ovr:74},{name:"Paulo Isidoro", pos:["ZAG"], ovr:76},
+  {name:"Adilson Batista", pos:["LATE"], ovr:73},{name:"Marcelo Ramos", pos:["VOL"], ovr:73},
+  {name:"Dinei", pos:["CA"], ovr:78},
+]},
+{team:"Grêmio", year:1993, players:[
+  {name:"Danrlei", pos:["GOL"], ovr:77},{name:"Élder", pos:["LATD"], ovr:72},
+  {name:"Carlos Miguel", pos:["ZAG"], ovr:74},{name:"Nei", pos:["ZAG"], ovr:73},
+  {name:"Fábio", pos:["LATE"], ovr:72},{name:"Bento", pos:["VOL"], ovr:73},
+  {name:"Gilson", pos:["CA"], ovr:78},
+]},
+{team:"Grêmio", year:1994, players:[
+  {name:"Danrlei", pos:["GOL"], ovr:78},{name:"Odilon", pos:["LATD"], ovr:73},
+  {name:"Adílson", pos:["ZAG"], ovr:75},{name:"Cacapa", pos:["ZAG"], ovr:75},
+  {name:"Cristóvão", pos:["LATE"], ovr:73},{name:"Paulo Nunes", pos:["VOL","CA"], ovr:78},
+  {name:"Rodrigo Fabri", pos:["CA"], ovr:76},
+]},
+{team:"Ceará", year:1994, players:[
+  {name:"Márcio", pos:["GOL"], ovr:73},{name:"Aílton", pos:["LATD"], ovr:71},
+  {name:"Marcelo Nicácio", pos:["ZAG"], ovr:72},{name:"Erivélton", pos:["ZAG"], ovr:72},
+  {name:"Duda", pos:["LATE"], ovr:71},{name:"Marreta", pos:["VOL"], ovr:72},
+  {name:"Paulinho", pos:["CA"], ovr:75},
+]},
+{team:"Corinthians", year:1995, players:[
+  {name:"Ronaldo Giovanelli", pos:["GOL"], ovr:76},{name:"Rogério Pinheiro", pos:["LATD"], ovr:73},
+  {name:"Vampeta", pos:["VOL"], ovr:78},{name:"Marcelinho Carioca", pos:["MEI","PE"], ovr:83},
+  {name:"Viola", pos:["MEI","PD"], ovr:80},{name:"Ronaldo", pos:["ZAG"], ovr:74},
+  {name:"Paulinho McLaren", pos:["CA"], ovr:78},
+]},
+{team:"Grêmio", year:1995, players:[
+  {name:"Danrlei", pos:["GOL"], ovr:78},{name:"Élder", pos:["LATD"], ovr:73},
+  {name:"Adílson", pos:["ZAG"], ovr:75},{name:"Cacapa", pos:["ZAG"], ovr:75},
+  {name:"Cristóvão", pos:["LATE"], ovr:73},{name:"Bento", pos:["VOL"], ovr:74},
+  {name:"Paulo Nunes", pos:["CA","VOL"], ovr:78},
+]},
+{team:"Cruzeiro", year:1996, players:[
+  {name:"Roberto", pos:["GOL"], ovr:77},{name:"Sorato", pos:["LATD"], ovr:73},
+  {name:"Cléber", pos:["ZAG"], ovr:75},{name:"André Luís Ferreira", pos:["ZAG"], ovr:75},
+  {name:"Adilson Batista", pos:["LATE"], ovr:74},{name:"Ricardinho", pos:["VOL","MEI"], ovr:80},
+  {name:"Élber", pos:["CA"], ovr:80},
+]},
+{team:"Palmeiras", year:1996, players:[
+  {name:"Velloso", pos:["GOL"], ovr:76},{name:"Arce", pos:["LATD"], ovr:76},
+  {name:"Júnior", pos:["ZAG"], ovr:75},{name:"Antônio Carlos", pos:["ZAG"], ovr:75},
+  {name:"Cléber Alves", pos:["LATE"], ovr:73},{name:"César Sampaio", pos:["VOL"], ovr:82},
+  {name:"Luizão", pos:["CA"], ovr:82},
+]},
+{team:"Flamengo", year:1997, players:[
+  {name:"Ronaldo Giovanelli2", pos:["GOL"], ovr:74},{name:"Marcelo Passos", pos:["LATD"], ovr:73},
+  {name:"André Luís", pos:["ZAG"], ovr:74},{name:"Antônio Carlos2", pos:["ZAG"], ovr:74},
+  {name:"Júnior Baiano", pos:["LATE","ZAG"], ovr:78},{name:"Sávio", pos:["MEI","PE","PD"], ovr:84},
+  {name:"Romário", pos:["CA"], ovr:89},
+]},
+{team:"Palmeiras", year:1998, players:[
+  {name:"Velloso", pos:["GOL"], ovr:78},{name:"Arce", pos:["LATD"], ovr:77},
+  {name:"Roque Júnior", pos:["ZAG"], ovr:80},{name:"Júnior", pos:["ZAG"], ovr:76},
+  {name:"Cléber Alves", pos:["LATE"], ovr:74},{name:"Zinho", pos:["MEI","PE"], ovr:80},
+  {name:"Oséas", pos:["CA"], ovr:80},
+]},
+{team:"Cruzeiro", year:1998, players:[
+  {name:"Dida", pos:["GOL"], ovr:80},{name:"Sorato", pos:["LATD"], ovr:73},
+  {name:"Cléber", pos:["ZAG"], ovr:75},{name:"Fábio Luciano", pos:["ZAG"], ovr:74},
+  {name:"Adilson Batista", pos:["LATE"], ovr:74},{name:"Alex", pos:["MEI","PE"], ovr:83},
+  {name:"Edmundo", pos:["CA","MEI"], ovr:85},
+]},
+{team:"Juventude", year:1999, players:[
+  {name:"Roberto", pos:["GOL"], ovr:74},{name:"Chiquinho", pos:["LATD"], ovr:72},
+  {name:"Rodrigo", pos:["ZAG"], ovr:73},{name:"Moacir", pos:["ZAG"], ovr:73},
+  {name:"Danilo Boza", pos:["LATE"], ovr:72},{name:"Jean Irmer", pos:["VOL"], ovr:73},
+  {name:"Rodrigo Fabri", pos:["CA"], ovr:78},
+]},
+{team:"Botafogo", year:1999, players:[
+  {name:"Vágner", pos:["GOL"], ovr:75},{name:"Wagner", pos:["LATD"], ovr:73},
+  {name:"Antônio Carlos3", pos:["ZAG"], ovr:74},{name:"Vica", pos:["ZAG"], ovr:73},
+  {name:"Vinícius", pos:["LATE"], ovr:73},{name:"Sávio Bahia", pos:["VOL"], ovr:74},
+  {name:"Donizete Oliveira", pos:["MEI","PE"], ovr:77},
+]},
+{team:"Cruzeiro", year:2000, players:[
+  {name:"Dida", pos:["GOL"], ovr:81},{name:"Sorato", pos:["LATD"], ovr:74},
+  {name:"Cléber", pos:["ZAG"], ovr:76},{name:"Gilberto", pos:["ZAG"], ovr:75},
+  {name:"Adilson Batista", pos:["LATE"], ovr:74},{name:"Ricardinho", pos:["VOL","MEI"], ovr:81},
+  {name:"Oséas", pos:["CA"], ovr:82},
+]},
+{team:"São Paulo", year:2000, players:[
+  {name:"Rogério Ceni", pos:["GOL"], ovr:85},{name:"Belletti", pos:["LATD"], ovr:78},
+  {name:"Fábio Aurélio", pos:["LATE"], ovr:79},{name:"Antônio Carlos4", pos:["ZAG"], ovr:76},
+  {name:"Cauã", pos:["ZAG"], ovr:74},{name:"Josué", pos:["VOL"], ovr:76},
+  {name:"Luís Fabiano", pos:["CA"], ovr:83},
+]},
+{team:"Grêmio", year:2001, players:[
+  {name:"Danrlei", pos:["GOL"], ovr:79},{name:"Odvan", pos:["LATD"], ovr:74},
+  {name:"Fábio Ferreira", pos:["ZAG"], ovr:75},{name:"Léo Lima", pos:["ZAG"], ovr:74},
+  {name:"Cristóvão2", pos:["LATE"], ovr:73},{name:"Zé Elias", pos:["VOL","MEI"], ovr:78},
+  {name:"Alex Dias", pos:["CA"], ovr:78},
+]},
+{team:"Corinthians", year:2001, players:[
+  {name:"Dida", pos:["GOL"], ovr:82},{name:"Fabinho", pos:["LATD"], ovr:76},
+  {name:"Fábio Luciano2", pos:["ZAG"], ovr:75},{name:"Ediglê", pos:["ZAG"], ovr:74},
+  {name:"Rogério", pos:["LATE"], ovr:73},{name:"Vampeta", pos:["VOL"], ovr:80},
+  {name:"Edilson", pos:["CA","PE"], ovr:80},
+]},
+{team:"Corinthians", year:2002, players:[
+  {name:"Dida", pos:["GOL"], ovr:82},{name:"Fabinho", pos:["LATD"], ovr:76},
+  {name:"Fábio Luciano2", pos:["ZAG"], ovr:76},{name:"Anderson", pos:["ZAG"], ovr:75},
+  {name:"Rogério", pos:["LATE"], ovr:73},{name:"Vampeta", pos:["VOL"], ovr:80},
+  {name:"Deivid", pos:["CA"], ovr:81},
+]},
+{team:"Brasiliense", year:2002, players:[
+  {name:"Márcio", pos:["GOL"], ovr:73},{name:"Índio", pos:["LATD"], ovr:71},
+  {name:"Ratinho", pos:["ZAG"], ovr:72},{name:"Anderson Salles", pos:["ZAG"], ovr:72},
+  {name:"Genílson", pos:["LATE"], ovr:71},{name:"Marcinho", pos:["VOL"], ovr:72},
+  {name:"Marquinhos Santos", pos:["CA"], ovr:75},
+]},
+{team:"Flamengo", year:2003, players:[
+  {name:"Diego Cavalieri", pos:["GOL"], ovr:78},{name:"Léo Moura", pos:["LATD"], ovr:76},
+  {name:"Cris", pos:["ZAG"], ovr:78},{name:"Alex Bass", pos:["ZAG"], ovr:73},
+  {name:"Athirson", pos:["LATE"], ovr:73},{name:"Cristian", pos:["VOL","MEI"], ovr:76},
+  {name:"Edu", pos:["CA"], ovr:78},
+]},
+{team:"Santo André", year:2004, players:[
+  {name:"Fábio", pos:["GOL"], ovr:75},{name:"André Bahia", pos:["LATD"], ovr:72},
+  {name:"Fabiano", pos:["ZAG"], ovr:73},{name:"Wellington Saci", pos:["ZAG"], ovr:72},
+  {name:"Fabrício", pos:["LATE"], ovr:72},{name:"Marcinho2", pos:["VOL"], ovr:73},
+  {name:"Grafite", pos:["CA"], ovr:80},
+]},
+{team:"Flamengo", year:2004, players:[
+  {name:"Diego Cavalieri", pos:["GOL"], ovr:78},{name:"Léo Moura", pos:["LATD"], ovr:76},
+  {name:"Cris", pos:["ZAG"], ovr:78},{name:"Alex Bass", pos:["ZAG"], ovr:73},
+  {name:"Athirson", pos:["LATE"], ovr:73},{name:"Índio2", pos:["VOL","MEI"], ovr:76},
+  {name:"Athirson2", pos:["CA"], ovr:77},
+]},
+{team:"Paulista", year:2005, players:[
+  {name:"Fabrício Fontoura", pos:["GOL"], ovr:74},{name:"Ferrugem", pos:["LATD"], ovr:72},
+  {name:"Wellington Saci", pos:["ZAG"], ovr:72},{name:"Fabiano2", pos:["ZAG"], ovr:72},
+  {name:"Marcinho3", pos:["LATE"], ovr:71},{name:"Diego Renan", pos:["VOL","MEI"], ovr:74},
+  {name:"Alan Kardec", pos:["CA"], ovr:78},
+]},
+{team:"Fluminense", year:2005, players:[
+  {name:"Fernando Prass", pos:["GOL"], ovr:78},{name:"Léo", pos:["LATD"], ovr:74},
+  {name:"Roger", pos:["ZAG"], ovr:75},{name:"Gum", pos:["ZAG"], ovr:74},
+  {name:"Carlinhos", pos:["LATE"], ovr:73},{name:"Fábio2", pos:["VOL"], ovr:74},
+  {name:"Romário", pos:["CA"], ovr:87},
+]},
+{team:"Vasco da Gama", year:2006, players:[
+  {name:"Fernando Henrique", pos:["GOL"], ovr:76},{name:"Rafael Galhardo", pos:["LATD"], ovr:74},
+  {name:"Bruno", pos:["ZAG"], ovr:75},{name:"Cássio Lincoln", pos:["ZAG"], ovr:74},
+  {name:"Valdiram", pos:["LATE"], ovr:75},{name:"Léo Lima2", pos:["VOL"], ovr:73},
+  {name:"Alecsandro", pos:["CA"], ovr:78},
+]},
+{team:"Figueirense", year:2007, players:[
+  {name:"Wilson", pos:["GOL"], ovr:73},{name:"Elicarlos", pos:["LATD"], ovr:71},
+  {name:"Michel", pos:["ZAG"], ovr:72},{name:"Doré", pos:["ZAG"], ovr:72},
+  {name:"Nadson", pos:["LATE"], ovr:71},{name:"Marcelo Costa", pos:["VOL"], ovr:72},
+  {name:"Rafael Costa", pos:["CA"], ovr:75},
+]},
+{team:"Corinthians", year:2008, players:[
+  {name:"Felipe", pos:["GOL"], ovr:75},{name:"Alessandro", pos:["LATD"], ovr:75},
+  {name:"Chicão", pos:["ZAG"], ovr:76},{name:"Léo", pos:["ZAG"], ovr:75},
+  {name:"Marinho", pos:["LATE"], ovr:72},{name:"Índio3", pos:["VOL","MEI"], ovr:76},
+  {name:"Jorge Henrique", pos:["CA","PE"], ovr:78},
+]},
+{team:"Internacional", year:2009, players:[
+  {name:"Clemer", pos:["GOL"], ovr:78},{name:"Kléber", pos:["LATD"], ovr:74},
+  {name:"Bolívar", pos:["ZAG"], ovr:79},{name:"Índio4", pos:["ZAG"], ovr:73},
+  {name:"Wellington Monteiro", pos:["LATE"], ovr:73},{name:"Taison", pos:["MEI","PD","PE"], ovr:81},
+  {name:"Alecsandro2", pos:["CA"], ovr:79},
+]},
+{team:"Vitória", year:2010, players:[
+  {name:"Wilson", pos:["GOL"], ovr:74},{name:"Kadu", pos:["LATD"], ovr:72},
+  {name:"Victor Ramos", pos:["ZAG"], ovr:73},{name:"Aylton", pos:["ZAG"], ovr:72},
+  {name:"Willian Farias", pos:["LATE","VOL"], ovr:73},{name:"Escudero", pos:["VOL","MEI"], ovr:76},
+  {name:"Marquinhos", pos:["CA"], ovr:77},
+]},
+{team:"Coritiba", year:2011, players:[
+  {name:"Wilson2", pos:["GOL"], ovr:73},{name:"Natanael", pos:["LATD"], ovr:72},
+  {name:"Manoel", pos:["ZAG"], ovr:74},{name:"Zé Ivaldo", pos:["ZAG"], ovr:73},
+  {name:"Bruno Silva", pos:["LATE"], ovr:71},{name:"William Farias2", pos:["VOL"], ovr:72},
+  {name:"Kléber", pos:["CA"], ovr:76},
+]},
+{team:"Coritiba", year:2012, players:[
+  {name:"Wilson3", pos:["GOL"], ovr:73},{name:"Natanael2", pos:["LATD"], ovr:72},
+  {name:"Manoel2", pos:["ZAG"], ovr:74},{name:"Werley", pos:["ZAG"], ovr:74},
+  {name:"Bruno Silva2", pos:["LATE"], ovr:72},{name:"Alex Santana", pos:["VOL","MEI"], ovr:74},
+  {name:"Kleber Gladiador", pos:["CA"], ovr:77},
+]},
+{team:"Flamengo", year:2013, players:[
+  {name:"Felipe", pos:["GOL"], ovr:78},{name:"Léo Moura", pos:["LATD"], ovr:77},
+  {name:"Wallace", pos:["ZAG"], ovr:76},{name:"Samir", pos:["ZAG"], ovr:75},
+  {name:"Ibson", pos:["LATE","VOL"], ovr:76},{name:"Elias", pos:["VOL","MEI"], ovr:78},
+  {name:"Hernane", pos:["CA"], ovr:80},
+]},
+{team:"Athletico Paranaense", year:2013, players:[
+  {name:"Weverton", pos:["GOL"], ovr:78},{name:"Jonathan", pos:["LATD"], ovr:73},
+  {name:"Wanderson2", pos:["ZAG"], ovr:74},{name:"Manoel3", pos:["ZAG"], ovr:73},
+  {name:"Marcelo Cirino", pos:["LATE","PE"], ovr:76},{name:"Bruno Guimarães2", pos:["VOL"], ovr:74},
+  {name:"Marcelo Moreno", pos:["CA"], ovr:80},
+]},
+{team:"Cruzeiro", year:2014, players:[
+  {name:"Fábio", pos:["GOL"], ovr:82},{name:"Mayke", pos:["LATD"], ovr:75},
+  {name:"Dedé", pos:["ZAG"], ovr:81},{name:"Manoel4", pos:["ZAG"], ovr:78},
+  {name:"Egídio", pos:["LATE"], ovr:76},{name:"Lucas Silva", pos:["VOL","MEI"], ovr:79},
+  {name:"Willian2", pos:["CA","PE"], ovr:79},
+]},
+{team:"Santos", year:2015, players:[
+  {name:"Vanderlei", pos:["GOL"], ovr:78},{name:"Gil Dias", pos:["LATD"], ovr:73},
+  {name:"Gustavo Henrique", pos:["ZAG"], ovr:78},{name:"Victor Ferraz", pos:["LATD"], ovr:73},
+  {name:"Zeca", pos:["LATE"], ovr:74},{name:"Renato", pos:["VOL","MEI"], ovr:76},
+  {name:"Ricardo Oliveira", pos:["CA"], ovr:83},
+]},
+{team:"Atlético Mineiro", year:2016, players:[
+  {name:"Victor", pos:["GOL"], ovr:80},{name:"Marcos Rocha", pos:["LATD"], ovr:76},
+  {name:"Léo Silva", pos:["ZAG"], ovr:76},{name:"Emerson Conceição", pos:["ZAG"], ovr:75},
+  {name:"Fabrício Bruno2", pos:["LATE"], ovr:74},{name:"Adílson", pos:["VOL","MEI"], ovr:76},
+  {name:"Robinho2", pos:["CA","MEI"], ovr:81},
+]},
+{team:"Flamengo", year:2017, players:[
+  {name:"Diego Alves", pos:["GOL"], ovr:83},{name:"Rafinha", pos:["LATD"], ovr:78},
+  {name:"Réver", pos:["ZAG"], ovr:80},{name:"Juan", pos:["ZAG"], ovr:76},
+  {name:"Renê", pos:["LATE"], ovr:75},{name:"Diego", pos:["MEI","VOL"], ovr:81},
+  {name:"Paolo Guerrero", pos:["CA"], ovr:83},
+]},
+{team:"Cruzeiro", year:2018, players:[
+  {name:"Fábio", pos:["GOL"], ovr:82},{name:"Léo", pos:["LATD"], ovr:74},
+  {name:"Manoel5", pos:["ZAG"], ovr:78},{name:"Edilson2", pos:["ZAG"], ovr:75},
+  {name:"Egídio2", pos:["LATE"], ovr:76},{name:"Henrique2", pos:["VOL"], ovr:77},
+  {name:"Rafael Sóbis", pos:["CA"], ovr:78},
+]},
+{team:"Corinthians", year:2018, players:[
+  {name:"Cássio", pos:["GOL"], ovr:82},{name:"Fagner", pos:["LATD"], ovr:78},
+  {name:"Henrique", pos:["ZAG"], ovr:76},{name:"Balbuena", pos:["ZAG"], ovr:78},
+  {name:"Danilo Avelar", pos:["LATE"], ovr:74},{name:"Gabriel", pos:["VOL","MEI"], ovr:76},
+  {name:"Jadson", pos:["CA","MEI"], ovr:80},
+]},
+{team:"Internacional", year:2019, players:[
+  {name:"Marcelo Lomba", pos:["GOL"], ovr:78},{name:"Zeca", pos:["LATD"], ovr:74},
+  {name:"Víctor Cuesta", pos:["ZAG"], ovr:78},{name:"Rodrigo Moledo", pos:["ZAG"], ovr:76},
+  {name:"Uendel", pos:["LATE"], ovr:75},{name:"Edenílson", pos:["VOL","MEI"], ovr:78},
+  {name:"Paolo Guerrero2", pos:["CA"], ovr:83},
+]},
+{team:"Palmeiras", year:2020, players:[
+  {name:"Weverton", pos:["GOL"], ovr:82},{name:"Marcos Rocha2", pos:["LATD"], ovr:78},
+  {name:"Luan", pos:["ZAG"], ovr:77},{name:"Vitor Hugo", pos:["ZAG"], ovr:77},
+  {name:"Egídio3", pos:["LATE"], ovr:75},{name:"Felipe Melo2", pos:["ZAG","VOL"], ovr:80},
+  {name:"Rony", pos:["CA","PE"], ovr:80},
+]},
+{team:"Grêmio", year:2020, players:[
+  {name:"Vanderlei2", pos:["GOL"], ovr:77},{name:"Rodinei", pos:["LATD"], ovr:75},
+  {name:"Geromel", pos:["ZAG"], ovr:79},{name:"Kannemann", pos:["ZAG"], ovr:80},
+  {name:"Bruno Cortez", pos:["LATE"], ovr:75},{name:"Matheus Henrique2", pos:["VOL","MEI"], ovr:76},
+  {name:"Diego Souza", pos:["CA","MEI"], ovr:78},
+]},
+{team:"Atlético Mineiro", year:2021, players:[
+  {name:"Everson", pos:["GOL"], ovr:80},{name:"Guga", pos:["LATD"], ovr:76},
+  {name:"Réver2", pos:["ZAG"], ovr:78},{name:"Nathan Silva", pos:["ZAG"], ovr:75},
+  {name:"Guilherme Arana", pos:["LATE","PE"], ovr:79},{name:"Jair", pos:["VOL"], ovr:76},
+  {name:"Hulk", pos:["CA","PD"], ovr:85},
+]},
+{team:"Athletico Paranaense", year:2021, players:[
+  {name:"Santos2", pos:["GOL"], ovr:76},{name:"Khellven", pos:["LATD","LATE"], ovr:74},
+  {name:"Thiago Heleno2", pos:["ZAG"], ovr:76},{name:"Pedro Henrique", pos:["ZAG"], ovr:74},
+  {name:"Abner", pos:["LATE"], ovr:74},{name:"Fernandinho2", pos:["VOL"], ovr:76},
+  {name:"Pablo2", pos:["CA"], ovr:78},
+]},
+{team:"Flamengo", year:2022, players:[
+  {name:"Santos3", pos:["GOL"], ovr:79},{name:"Varela", pos:["LATD"], ovr:76},
+  {name:"David Luiz", pos:["ZAG"], ovr:82},{name:"Léo Pereira", pos:["ZAG"], ovr:80},
+  {name:"Filipe Luís", pos:["LATE"], ovr:78},{name:"Éverton Ribeiro", pos:["MEI","PD"], ovr:83},
+  {name:"Gabigol", pos:["CA","MEI"], ovr:85},
+]},
+{team:"Corinthians", year:2022, players:[
+  {name:"Cássio2", pos:["GOL"], ovr:81},{name:"Fagner2", pos:["LATD"], ovr:77},
+  {name:"Gil", pos:["ZAG"], ovr:76},{name:"Balbuena2", pos:["ZAG"], ovr:77},
+  {name:"Fábio Santos2", pos:["LATE"], ovr:74},{name:"Renato Augusto2", pos:["MEI","VOL"], ovr:79},
+  {name:"Giuliano", pos:["MEI","CA"], ovr:79},
+]},
+{team:"Atlético Mineiro", year:2024, players:[
+  {name:"Everson2", pos:["GOL"], ovr:80},{name:"Mariano", pos:["LATD"], ovr:76},
+  {name:"Alan Franco", pos:["ZAG"], ovr:78},{name:"Battaglia", pos:["ZAG"], ovr:77},
+  {name:"Guilherme Arana2", pos:["LATE","PE"], ovr:80},{name:"Otávio", pos:["VOL","MEI"], ovr:79},
+  {name:"Hulk2", pos:["CA","PD"], ovr:85},
+]},
+{team:"Corinthians", year:2025, players:[
+  {name:"Hugo Souza", pos:["GOL"], ovr:79},{name:"Matheuzinho", pos:["LATD"], ovr:75},
+  {name:"André Ramalho", pos:["ZAG"], ovr:77},{name:"Cacá", pos:["ZAG"], ovr:76},
+  {name:"Hugo", pos:["LATE"], ovr:74},{name:"Raniele", pos:["VOL"], ovr:77},
+  {name:"Yuri Alberto", pos:["CA"], ovr:83},{name:"Memphis Depay", pos:["CA","MEI","PE"], ovr:85},
+]},
+{team:"Vasco da Gama", year:2025, players:[
+  {name:"Léo Jardim", pos:["GOL"], ovr:78},{name:"Paulo Henrique", pos:["LATD"], ovr:74},
+  {name:"Léo Pelé", pos:["ZAG"], ovr:75},{name:"João Victor", pos:["ZAG"], ovr:77},
+  {name:"Puma Rodríguez", pos:["LATE"], ovr:74},{name:"Rayan", pos:["MEI","PE"], ovr:78},
+  {name:"Vegetti", pos:["CA"], ovr:79},
+]},
+{team:"Flamengo", year:2025, players:[
+  {name:"Rossi", pos:["GOL"], ovr:85},{name:"Wesley", pos:["LATD"], ovr:78},
+  {name:"Léo Pereira", pos:["ZAG"], ovr:82},{name:"Léo Ortiz", pos:["ZAG"], ovr:80},
+  {name:"Alex Sandro", pos:["LATE"], ovr:79},{name:"Jorginho", pos:["VOL"], ovr:80},
+  {name:"Arrascaeta", pos:["MEI","PE","PD"], ovr:87},{name:"Pedro", pos:["CA"], ovr:86},
+]},
+{team:"Palmeiras", year:2024, players:[
+  {name:"Weverton2", pos:["GOL"], ovr:82},{name:"Marcos Rocha3", pos:["LATD"], ovr:77},
+  {name:"Gustavo Gómez", pos:["ZAG"], ovr:83},{name:"Murilo", pos:["ZAG"], ovr:78},
+  {name:"Piquerez", pos:["LATE"], ovr:79},{name:"Richard Ríos", pos:["VOL","MEI"], ovr:80},
+  {name:"Estêvão", pos:["PD","PE"], ovr:83},{name:"Flaco López", pos:["CA"], ovr:79},
+]},
+{team:"São Paulo", year:2024, players:[
+  {name:"Rafael", pos:["GOL"], ovr:79},{name:"Igor Vinícius", pos:["LATD"], ovr:75},
+  {name:"Arboleda", pos:["ZAG"], ovr:80},{name:"Alan Franco2", pos:["ZAG"], ovr:77},
+  {name:"Welington", pos:["LATE"], ovr:76},{name:"Alisson", pos:["VOL"], ovr:78},
+  {name:"Lucas Moura", pos:["MEI","PD","PE"], ovr:82},{name:"Calleri", pos:["CA"], ovr:81},
+]},
+{team:"Grêmio", year:2024, players:[
+  {name:"Marchesín", pos:["GOL"], ovr:79},{name:"João Pedro", pos:["LATD"], ovr:75},
+  {name:"Jemerson", pos:["ZAG"], ovr:76},{name:"Kannemann", pos:["ZAG"], ovr:80},
+  {name:"Reinaldo", pos:["LATE"], ovr:76},{name:"Villasanti", pos:["VOL"], ovr:79},
+  {name:"Cristaldo", pos:["MEI","PE"], ovr:80},{name:"Braithwaite", pos:["CA"], ovr:80},
+]},
+{team:"Botafogo", year:2025, players:[
+  {name:"John", pos:["GOL"], ovr:79},{name:"Vitinho", pos:["LATD","PD"], ovr:77},
+  {name:"Bastos", pos:["ZAG"], ovr:78},{name:"Alexander Barboza", pos:["ZAG"], ovr:79},
+  {name:"Alex Telles", pos:["LATE","PE"], ovr:80},{name:"Marlon Freitas", pos:["VOL"], ovr:78},
+  {name:"Savarino", pos:["MEI","PD","PE"], ovr:81},{name:"Igor Jesus", pos:["CA"], ovr:79},
+]},
 ];
+
+// Completa todo elenco que tiver menos de 11 jogadores, cobrindo as posições que faltarem
+const FILLER_FIRST = ["Carlos","João","Pedro","Lucas","Rafael","Bruno","Diego","Thiago","Gabriel","Felipe","André","Marcos","Rodrigo","Vinícius","Danilo","Everton","Wesley","Anderson","Leandro","Renato","Fábio","Matheus","Douglas","Igor","Caio"];
+const FILLER_LAST = ["Silva","Santos","Souza","Oliveira","Pereira","Costa","Rodrigues","Almeida","Nascimento","Carvalho","Gomes","Martins","Araújo","Melo","Ribeiro","Alves","Monteiro","Cardoso","Teixeira","Dias","Barros","Freitas","Nogueira","Pinto","Vieira"];
+const SQUAD_FILL_TEMPLATE = ["GOL","ZAG","ZAG","LATD","LATE","VOL","VOL","MEI","PD","PE","CA"];
+function fillerName(usedNames){
+  let name, tries=0;
+  do{
+    const f = FILLER_FIRST[Math.floor(Math.random()*FILLER_FIRST.length)];
+    const l = FILLER_LAST[Math.floor(Math.random()*FILLER_LAST.length)];
+    name = f+" "+l;
+    tries++;
+  } while(usedNames.has(name) && tries<40);
+  usedNames.add(name);
+  return name;
+}
+function ensureFullSquads(db){
+  db.forEach(t=>{
+    const usedNames = new Set(t.players.map(p=>p.name));
+    const avgOvr = t.players.length ? Math.round(t.players.reduce((s,p)=>s+p.ovr,0)/t.players.length) - 5 : 65;
+    const hasGol = t.players.some(p=>p.pos.includes("GOL"));
+    const fillQueue = hasGol ? SQUAD_FILL_TEMPLATE.filter(c=>c!=="GOL") : SQUAD_FILL_TEMPLATE;
+    let i=0;
+    while(t.players.length<11){
+      let code = fillQueue[i % fillQueue.length];
+      i++;
+      // segurança extra: nunca deixar entrar um segundo goleiro
+      if(code==="GOL" && t.players.some(p=>p.pos.includes("GOL"))){ code="ZAG"; }
+      const name = fillerName(usedNames);
+      const ovr = Math.max(52, Math.min(88, avgOvr + Math.floor(Math.random()*9)-4));
+      t.players.push({name, pos:[code], ovr});
+    }
+  });
+}
+[LIBERTADORES_TEAMS, CHAMPIONS_TEAMS, BRASIL_TEAMS].forEach(ensureFullSquads);
+
+// Reforça times fracos: se a média do elenco estiver muito baixa, sobe o overall geral do time
+// (times já fortes não são alterados)
+function boostWeakTeams(db, targetAvg, maxBoost){
+  db.forEach(t=>{
+    const avg = t.players.reduce((s,p)=>s+p.ovr,0)/t.players.length;
+    if(avg < targetAvg){
+      const boost = Math.min(maxBoost, Math.round(targetAvg - avg));
+      t.players.forEach(p=>{ p.ovr = Math.min(94, p.ovr + boost); });
+    }
+  });
+}
+boostWeakTeams(LIBERTADORES_TEAMS, 74, 10);
+boostWeakTeams(CHAMPIONS_TEAMS, 76, 10);
+boostWeakTeams(BRASIL_TEAMS, 76, 10);
 
 const RIVAL_CLUBS_LIBER = [
   {name:"Nacional", tier:3},{name:"Colo-Colo", tier:3},{name:"Universitario", tier:2},
@@ -1574,6 +2041,8 @@ function subscribeRoom(code){
   });
 }
 function onRoomUpdate(data){
+  state.online.hostData = data.host || null;
+  state.online.guestData = data.guest || null;
   // Host: assim que os dois estiverem prontos, calcular o jogo (só o host escreve o resultado)
   if(state.online.role==="host" && data.host && data.guest && data.host.ready && data.guest.ready && !data.matchResult){
     computeAndPublishMatch(data);
@@ -1591,6 +2060,8 @@ function onRoomUpdate(data){
     state.phase = "online-live";
     startLiveAnimation(data.matchResult);
     render();
+  } else if(state.phase!=="online-live" && state.phase!=="online-result"){
+    render();
   }
 }
 function computeAndPublishMatch(data){
@@ -1599,8 +2070,8 @@ function computeAndPublishMatch(data){
   const guestStr = data.guest.strength || 60;
   const [hg, gg] = simulateMatch(hostStr, guestStr);
   const events = [];
-  for(let i=0;i<hg;i++) events.push({minute: 1+Math.floor(Math.random()*90), side:"host"});
-  for(let i=0;i<gg;i++) events.push({minute: 1+Math.floor(Math.random()*90), side:"guest"});
+  for(let i=0;i<hg;i++) events.push({minute: 1+Math.floor(Math.random()*90), side:"host", scorer: pickScorer(data.host.squad)});
+  for(let i=0;i<gg;i++) events.push({minute: 1+Math.floor(Math.random()*90), side:"guest", scorer: pickScorer(data.guest.squad)});
   events.sort((a,b)=>a.minute-b.minute);
   let pens = null;
   if(hg===gg){
@@ -1611,13 +2082,26 @@ function computeAndPublishMatch(data){
     matchResult: { hostGoals:hg, guestGoals:gg, events, pens, finishedAt: serverTimestamp() }
   });
 }
+function pickScorer(squad){
+  if(!squad || squad.length===0) return "Jogador desconhecido";
+  const weighted = [];
+  squad.forEach(p=>{
+    let w = 1;
+    if(p.pos==="CA") w = 6;
+    else if(p.pos==="PD" || p.pos==="PE") w = 4;
+    else if(p.pos==="MEI") w = 3;
+    else if(p.pos==="VOL") w = 1.5;
+    for(let i=0;i<Math.round(w*2);i++) weighted.push(p.name);
+  });
+  return weighted[Math.floor(Math.random()*weighted.length)];
+}
 function onlineSubmitReady(){
   if(!fbReady()) return;
   const { update } = window.__fb;
   const str = teamStrength();
-  const squadNames = state.starterSlots.filter(s=>s.filled).map(s=>s.filled.name+" ("+s.filled.team+" "+s.filled.year+")");
+  const squad = state.starterSlots.filter(s=>s.filled).map(s=>({name:s.filled.name, pos:s.code, team:s.filled.team, year:s.filled.year, ovr:s.filled.ovr}));
   update(roomRef(state.online.roomCode), {
-    [state.online.role]: { ready:true, strength:str, formation:state.formationKey, squadNames }
+    [state.online.role]: { ready:true, strength:str, formation:state.formationKey, squad }
   });
   state.phase = "online-waiting-draft";
   render();
@@ -1679,6 +2163,7 @@ function renderChrome(){
   const brandTxt = document.getElementById("brandTxt");
   const brandMark = document.getElementById("brandMark");
   document.body.classList.toggle("theme-ucl", state.mode==="ucl");
+  document.body.classList.toggle("theme-brasil", state.mode==="brasil");
   brandTxt.textContent = state.mode==="ucl" ? "Champions Draft" : state.mode==="brasil" ? "Copa do Brasil Draft" : "Libertadores Draft";
   brandMark.textContent = state.mode==="ucl" ? "⭐" : state.mode==="brasil" ? "🇧🇷" : "🏆";
   if(state.phase==="landing"){
@@ -1765,10 +2250,6 @@ function renderModeSelect(){
         <div class="fname">⭐ Champions League</div>
         <div class="fdesc">Monte seu time com craques históricos europeus e conquiste a Champions League.</div>
       </div>
-      <div class="formcard" data-mode="brasil">
-        <div class="fname">🇧🇷 Copa do Brasil</div>
-        <div class="fdesc">Monte seu time com mais de 40 clubes do futebol brasileiro e conquiste a Copa do Brasil.</div>
-      </div>
       <div class="formcard" data-onlinestart="1">
         <div class="fname">🌐 Online 1×1</div>
         <div class="fdesc">Jogue contra um amigo ao vivo — cada um monta seu time e disputam a grande final na hora.</div>
@@ -1794,10 +2275,6 @@ function renderOnlineComp(){
       <div class="formcard" data-onlinecomp="ucl">
         <div class="fname">⭐ Champions League</div>
         <div class="fdesc">Craques europeus históricos.</div>
-      </div>
-      <div class="formcard" data-onlinecomp="brasil">
-        <div class="fname">🇧🇷 Copa do Brasil</div>
-        <div class="fdesc">Clubes brasileiros históricos.</div>
       </div>
     </div>
   `;
@@ -1851,6 +2328,7 @@ function renderOnlineLive(){
   const oppGoals = state.online.role==="host" ? state.online.liveAwayGoals : state.online.liveHomeGoals;
   const done = state.online.liveDone;
   let resultLine = "";
+  let squadsHtml = "";
   if(done){
     let iWon;
     if(mr.hostGoals!==mr.guestGoals) iWon = (state.online.role==="host") === (mr.hostGoals>mr.guestGoals);
@@ -1859,6 +2337,22 @@ function renderOnlineLive(){
       ${iWon ? "🏆 VOCÊ VENCEU A FINAL!" : "Você foi vice-campeão."}
       ${mr.hostGoals===mr.guestGoals ? " (decidido nos pênaltis)" : ""}
     </div>`;
+    const mySquad = (state.online.role==="host" ? state.online.hostData : state.online.guestData)?.squad || [];
+    const oppSquad = (state.online.role==="host" ? state.online.guestData : state.online.hostData)?.squad || [];
+    const squadRows = (squad)=> squad.length===0 ? `<div style="color:var(--text-dim); font-size:12px;">Sem dados.</div>` :
+      squad.map(p=>`<div class="boxrow"><span class="pc">${POS_LABEL[p.pos]||p.pos}</span><span class="pv">${p.name}</span><span style="color:var(--text-dim); font-size:11px; margin-left:8px;">${p.team} ${p.year}</span></div>`).join("");
+    squadsHtml = `
+      <div class="layout3" style="grid-template-columns:1fr 1fr;">
+        <div class="right-panel panel-box">
+          <div class="boxhead"><span class="lbl">Seu Time</span></div>
+          <div class="boxlist">${squadRows(mySquad)}</div>
+        </div>
+        <div class="right-panel panel-box">
+          <div class="boxhead"><span class="lbl">Time do Adversário</span></div>
+          <div class="boxlist">${squadRows(oppSquad)}</div>
+        </div>
+      </div>
+    `;
   }
   return `
     <div class="panel">
@@ -1869,9 +2363,10 @@ function renderOnlineLive(){
         <div class="progressbar" style="margin-top:16px;"><span style="width:${(state.online.liveMinute/90*100)}%;"></span></div>
         ${resultLine}
       </div>
-      <div class="log">${state.online.liveEvents.map(ev=>`<div>⚽ Gol aos ${ev.minute}' — ${(ev.side==="host")===(state.online.role==="host")?"Você":"Adversário"}</div>`).join("")}</div>
+      <div class="log">${state.online.liveEvents.map(ev=>`<div>⚽ ${ev.minute}' — ${ev.scorer||"Gol"} (${(ev.side==="host")===(state.online.role==="host")?"Você":"Adversário"})</div>`).join("")}</div>
       ${done?`<div class="cta-bar"><button class="btn btn-gold" id="leaveRoomBtn">Sair da Sala</button></div>`:""}
     </div>
+    ${squadsHtml}
   `;
 }
 
@@ -2197,11 +2692,14 @@ function renderGroups(){
 /* ===================== MATA-MATA ===================== */
 function generateKnockoutOpponent(){
   const k=state.knockout;
-  // A cada fase o adversário melhora bastante: Oitavas ainda ok -> Quartas dura -> Semi muito dura -> Final quase impossível
+  // A cada fase o adversário melhora bastante: Oitavas ainda ok -> Quartas dura -> Semi muito dura -> Final quase impossível.
+  // O teto de força do adversário acompanha a força do seu time, então times muito fortes (Champions) não ficam fáceis demais.
   const rival = randomRivalTeam();
   const cap = TIER_CAPS[rival.tier];
-  const desired = k.myStrength - 6 + (k.stageIdx*12) + rnd(-2,10);
-  k.opponent={name:rival.name+" "+rival.flag, str:Math.round(clamp(desired, cap.min, cap.max))};
+  const desired = k.myStrength - 2 + (k.stageIdx*14) + rnd(-2,12);
+  const dynamicMax = Math.min(99, Math.max(cap.max, k.myStrength + 2 + k.stageIdx*4));
+  const dynamicMin = Math.max(cap.min, Math.round(k.myStrength - 18 + k.stageIdx*6));
+  k.opponent={name:rival.name+" "+rival.flag, str:Math.round(clamp(desired, dynamicMin, dynamicMax))};
   k.leg1=null; k.leg2=null; k.aggMine=0; k.aggOpp=0; k.resolved=false; k.wentToPens=false; k.wonPens=null;
 }
 function simulateKnockoutLeg(legNum){
